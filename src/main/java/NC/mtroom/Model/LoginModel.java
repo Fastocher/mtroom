@@ -1,6 +1,5 @@
 package NC.mtroom.Model;
 
-import NC.mtroom.Entity.DaoUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

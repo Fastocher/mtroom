@@ -17,7 +17,7 @@ import java.util.function.Function;
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
-
+    // задаем срок действия. Я так понял - желаемое количество часов * 60 секунд * 60 минут
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
     @Value("${jwt.secret}")

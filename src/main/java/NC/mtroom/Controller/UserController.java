@@ -2,12 +2,16 @@ package NC.mtroom.Controller;
 
 import NC.mtroom.Config.JwtTokenUtil;
 import NC.mtroom.Dto.UserDto;
+import NC.mtroom.Entity.UserEntity;
 import NC.mtroom.Model.JwtRequest;
 import NC.mtroom.Model.JwtResponse;
+import NC.mtroom.Model.UserModel;
 import NC.mtroom.Service.JwtUserDetailsService;
 import NC.mtroom.Service.UserService;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +19,11 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
@@ -48,7 +56,11 @@ public class UserController {
 
     @PostMapping("/registration")
     public ResponseEntity<?> saveUser(@RequestBody UserDto userDTO) throws Exception {
-        return ResponseEntity.ok(userDetailsService.save(userDTO));
+//        if (bindingResult.hasErrors()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong login or password");
+//        } else {
+            return ResponseEntity.ok(userDetailsService.save(userDTO));
+//        }
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -60,6 +72,12 @@ public class UserController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getUser (String login) throws Exception {
+            return ResponseEntity.ok(userService.getuser(login));
+    }
+
 }
 
 

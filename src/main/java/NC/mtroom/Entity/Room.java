@@ -24,4 +24,6 @@ public class Room {
 
     private String photos;
 
+    private String location;
+
 }
