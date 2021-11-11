@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "User")
+@Table(name = "Users")
 @Getter
 @Setter
 @NoArgsConstructor

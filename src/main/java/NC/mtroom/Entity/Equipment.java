@@ -1,6 +1,5 @@
 package NC.mtroom.Entity;
 
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,23 +7,21 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Room")
+@Table(name = "equipment")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Room {
-
+public class Equipment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer roomID;
+    private Integer EqID;
 
     private String name;
 
-    private long num_of_seats;
+    private Integer type;
 
-    private String photos;
-
-    private String location;
-
+    @ManyToOne
+    @JoinColumn(name = "room_id_room_id")
+    private Room roomID;
 }
