@@ -29,16 +29,16 @@ public class RoomController {
 //            return ResponseEntity.badRequest().body("Ошибка");
 //        }
 //    }
-//    @GetMapping
-//    public ResponseEntity getoneRoom(@RequestParam Long id){
-//        try{
-//           return ResponseEntity.ok(roomService.getone(id));
-//        } catch (RoomNotFound e) {
-//           return ResponseEntity.badRequest().body(e.getMessage());
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body("Ошибка");
-//        }
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getoneRoom(@PathVariable Long id){
+        try{
+           return ResponseEntity.ok(roomService.getone(id));
+        } catch (RoomNotFound e) {
+           return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка");
+        }
+    }
 
 
 }

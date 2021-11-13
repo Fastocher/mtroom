@@ -3,10 +3,8 @@ package NC.mtroom.Dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Entity;
+import javax.validation.constraints.*;
 
 
 @Data
@@ -14,11 +12,13 @@ import javax.validation.constraints.Size;
 
 // Что- то по типу шаблона
 //Используется как прослойка между API и Контроллером
-
+//@Entity
 public class UserDto {
-
+    @Pattern(regexp = "^[0-9]$")
     private String login;
+    @NotBlank(message = "Please provide a price")
     private String username;
+    @NotEmpty(message = "Please provide a price")
     private String password;
 
 }

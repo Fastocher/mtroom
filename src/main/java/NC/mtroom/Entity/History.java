@@ -1,5 +1,7 @@
 package NC.mtroom.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "history")
@@ -19,14 +22,17 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer historyID;
 
+    @OneToMany(mappedBy = "historyID")
+    private List<UserHistory> userHistories;
+
 
     private Timestamp start;
 
     private Timestamp end;
 
-
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "room_id_room_id")
+    @JoinColumn(name = "roomRoom_id")
     private Room roomID;
 
 }

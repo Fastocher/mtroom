@@ -10,13 +10,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserModel {
 
-    private String login;
+    private String roomID;
     private String username;
 
-    public static UserModel toModel(UserEntity entity){
+    public static UserModel toModel(UserEntity userEntity){
         UserModel model = new UserModel();
-        model.setLogin(entity.getLogin());
-        model.setUsername(entity.getUsername());
+      //  model.setLogin(userEntity.getUsername);
+        model.setUsername(userEntity.getUsername());
         return model;
     }
 }

@@ -23,4 +23,9 @@ public class UserService {
         }
         return userEntity;
     }
+
+    public UserModel gethistory(String login) {
+        UserEntity userEntity = userRepository.findByLogin(login);
+        return UserModel.toModel(userEntity);
+    }
 }

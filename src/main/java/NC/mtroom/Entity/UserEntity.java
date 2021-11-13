@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "Users")
@@ -25,12 +26,13 @@ public class UserEntity {
     @JsonIgnore
     private int id;
 
-
+    //@OneToMany
     private String login;
 
     private String username;
 
     @JsonIgnore
+    @NotBlank
     private String password;
 
 
