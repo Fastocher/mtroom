@@ -26,6 +26,10 @@ public class Room {
     @OneToMany(mappedBy = "roomID")
     private List<Equipment> equipment;
 
+    @OneToMany(mappedBy = "roomID")
+    private List<History> histories;
+
+
    // @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //private List<Room> roomID;
 

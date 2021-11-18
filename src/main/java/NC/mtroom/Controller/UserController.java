@@ -2,11 +2,13 @@ package NC.mtroom.Controller;
 
 import NC.mtroom.Config.JwtTokenUtil;
 import NC.mtroom.Dto.UserDto;
-import NC.mtroom.Entity.UserEntity;
 import NC.mtroom.Model.JwtRequest;
 import NC.mtroom.Model.JwtResponse;
+import NC.mtroom.Service.HistoryService;
 import NC.mtroom.Service.JwtUserDetailsService;
 import NC.mtroom.Service.UserService;
+
+import NC.mtroom.Service.UserHistoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/user")
@@ -27,6 +27,12 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HistoryService historyService;
+
+    @Autowired
+    private UserHistoryService userHistoryService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -73,9 +79,10 @@ public class UserController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<?> getHistory (String login) throws Exception{
-            return ResponseEntity.ok(userService.gethistory(login));
+    public ResponseEntity<?> getHistory (Long userID) throws Exception{
+            return ResponseEntity.ok(userHistoryService.getuserHistory(userID));
     }
+
 
 
 }

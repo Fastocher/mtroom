@@ -12,6 +12,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Users")
@@ -24,9 +25,11 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private int id;
+    private int userID;
 
-    //@OneToMany
+    @OneToMany(mappedBy = "userID")
+    private List<UserHistory> userHistories;
+
     private String login;
 
     private String username;

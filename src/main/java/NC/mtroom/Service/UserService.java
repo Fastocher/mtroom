@@ -1,6 +1,7 @@
 package NC.mtroom.Service;
 
 import NC.mtroom.Entity.UserEntity;
+import NC.mtroom.Entity.UserHistory;
 import NC.mtroom.Model.UserModel;
 import NC.mtroom.Repository.UserRepository;
 
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -24,8 +27,5 @@ public class UserService {
         return userEntity;
     }
 
-    public UserModel gethistory(String login) {
-        UserEntity userEntity = userRepository.findByLogin(login);
-        return UserModel.toModel(userEntity);
-    }
+
 }

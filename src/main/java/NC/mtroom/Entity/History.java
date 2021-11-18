@@ -23,6 +23,11 @@ public class History {
     private Integer historyID;
 
     @OneToMany(mappedBy = "historyID")
+//@OneToMany
+//@JoinColumns ({
+//        @JoinColumn(name="HistoryID", referencedColumnName = "historyHistoryID")
+//})
+
     private List<UserHistory> userHistories;
 
 
@@ -32,7 +37,7 @@ public class History {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "roomRoom_id")
+    @JoinColumn(name = "roomRoomID")
     private Room roomID;
 
 }

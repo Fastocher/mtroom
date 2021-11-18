@@ -1,13 +1,11 @@
 package NC.mtroom.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import io.swagger.models.auth.In;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.security.core.userdetails.User;
+import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+
 
 @Entity
 @Table(name = "user_history")
@@ -17,20 +15,20 @@ import javax.persistence.*;
 public class UserHistory {
 
     @Id
-    private Integer Id;
-
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "history_id_history_id", nullable = false)
-    private History historyID;
-
+    private Long id;
 
     private boolean isOrg;
 
+
     @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "login_id")
-    private UserEntity login;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "historyHistoryID", nullable = false)
+    private History historyID;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "UserID")
+    private UserEntity userID;
 
 
 

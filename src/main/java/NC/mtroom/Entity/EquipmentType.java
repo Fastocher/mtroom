@@ -20,7 +20,7 @@ public class EquipmentType {
     
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "equipment_eq_id")
+    @JoinColumn(name = "equipmentEqID")
     private Equipment equipment;
 
     private String name;
