@@ -75,9 +75,7 @@ paths:
   /user:
     get:
       tags:
-        - "room"
-      security:
-        - bearerAuth: [ ]
+        - "user"
       parameters:
         - name: login
           in: query
@@ -120,10 +118,10 @@ paths:
         404:
           description: "Room not found"
 
-  /user/history:
+  /room/history:
     get:
       tags:
-        - "user"
+        - "room"
       description: "Get user history"
       parameters:
         - name: user_login
