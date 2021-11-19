@@ -1,10 +1,8 @@
 package NC.mtroom.Service;
 
-
-import NC.mtroom.Dao.UserDao;
-import NC.mtroom.Dto.UserDto;
-import NC.mtroom.Entity.UserEntity;
-import NC.mtroom.Entity.UserHistory;
+import NC.mtroom.user.api.model.UserDto;
+import NC.mtroom.user.impl.entity.UserEntity;
+import NC.mtroom.user.impl.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,13 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userDao;
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
@@ -42,6 +39,4 @@ public class JwtUserDetailsService implements UserDetailsService {
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userDao.save(newUser);
     }
-
-
 }
