@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class EquipmentType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @JsonBackReference
     @ManyToOne

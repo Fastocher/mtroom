@@ -18,6 +18,7 @@ import NC.mtroom.user.impl.repository.UserHistoryRepository;
 import NC.mtroom.user.impl.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -124,10 +125,15 @@ public class RoomService implements IRoomService {
             userHistory.setUserID(userEntity);
             userHistory.setOrg(true);
             userHistory.setHistoryID(history);
-           // userHistory.setId();
 
             userHistoryRepository.save(userHistory);
-            return ResponseEntity.ok().body("Room successfully booked");
+            return ResponseEntity.ok().body("Room successfully booked! BookingID = " + userHistory.getHistoryID().getHistoryID());
 
+    }
+    @Transactional
+    @Override
+    public ResponseEntity<?> deleteBooking(Long id,Long bookingID) throws Exception{
+        historyRepository.deleteByHistoryID(bookingID);
+        return ResponseEntity.ok().body("Successfully delete booking");
     }
 }

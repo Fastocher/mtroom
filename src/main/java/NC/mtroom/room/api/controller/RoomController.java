@@ -27,8 +27,12 @@ public class RoomController {
     }
 
     @PostMapping("/booking/{id}")
-    public ResponseEntity<?> saveUser(@PathVariable Long id ,@RequestBody BookingDto bookingDto) throws Exception {
+    public ResponseEntity<?> setBooking(@PathVariable Long id ,@RequestBody BookingDto bookingDto) throws Exception {
         return ResponseEntity.ok(roomService.setBooking(id,bookingDto));
+    }
+    @DeleteMapping("/booking/{id}")
+    public ResponseEntity<?> deleteBooking(@PathVariable Long id ,@RequestParam Long bookingID) throws Exception{
+        return ResponseEntity.ok(roomService.deleteBooking(id,bookingID));
     }
 
 

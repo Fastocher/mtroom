@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -19,10 +20,9 @@ public class History {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer historyID;
+    private Long historyID;
 
-    @OneToMany(mappedBy = "historyID")
-
+    @OneToMany(mappedBy = "historyID", cascade = CascadeType.ALL)
     private List<UserHistory> userHistories;
 
     private Timestamp start;

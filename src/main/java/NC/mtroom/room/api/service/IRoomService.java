@@ -16,6 +16,7 @@ public interface IRoomService {
     public RoomDto getRoom(Long id) throws RoomNotFound;
     public List<TimeSegmentDto> getBooking(Long id) throws RoomNotFound;
     public ResponseEntity setBooking(Long id, BookingDto bookingDto) throws Exception;
-    //public List<UserHistoryDto> getUserHistory(String username);
+    public ResponseEntity deleteBooking(Long id,Long bookingID) throws Exception;
+
 
 }
