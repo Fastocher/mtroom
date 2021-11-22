@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TimeSegmentDto {
 
-    private Integer uuid;
 
-    private String name;
-
-    private String description;
+    private String start;
+    private String end;
 
 
 }

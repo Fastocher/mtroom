@@ -1,6 +1,6 @@
-package NC.mtroom.Config;
+package NC.mtroom.JWTConfig;
 
-import NC.mtroom.Service.JwtUserDetailsService;
+import NC.mtroom.JWTConfig.Service.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

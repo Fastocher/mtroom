@@ -20,7 +20,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private int userID;
+    private Long userID;
 
     @OneToMany(mappedBy = "userID")
     private List<UserHistory> userHistories;
@@ -30,7 +30,6 @@ public class UserEntity {
     private String username;
 
     @JsonIgnore
-    @NotBlank
     private String password;
 
 

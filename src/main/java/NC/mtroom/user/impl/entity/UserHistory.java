@@ -14,18 +14,21 @@ import javax.persistence.*;
 public class UserHistory {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id",unique=true, nullable = false)
     private Long id;
 
     private boolean isOrg;
 
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "historyHistoryID", nullable = false)
     private History historyID;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "UserID")
     private UserEntity userID;
 

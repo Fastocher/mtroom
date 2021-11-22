@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HistoryRepository extends CrudRepository<History, Long> {
-    History findByHistoryID(Integer HistoryID);
+//    History findByHistoryID();
 }

@@ -72,26 +72,6 @@ paths:
         "400":
           description: "Invalid login or password"
 
-  /user:
-    get:
-      tags:
-        - "user"
-      parameters:
-        - name: login
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        200:
-          description: "List of users"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserDTO"
-
-
-
   /room/{room_uuid}:
     get:
       tags:
@@ -118,10 +98,10 @@ paths:
         404:
           description: "Room not found"
 
-  /room/history:
+  /user/history:
     get:
       tags:
-        - "room"
+        - "user"
       description: "Get user history"
       parameters:
         - name: user_login
@@ -153,6 +133,11 @@ paths:
           schema:
             type: integer
           required: true
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            description: "Start date to check booked segments, isoformat "
       security:
         - bearerAuth: []
       responses:
@@ -254,7 +239,7 @@ components:
 
     TimeSegmentDTO:
       type: object
-      description: "Объект описывающий один сегмент времени"
+      description: "Объект описывающий один сегмент свободного времени"
       required:
         - start
         - end
@@ -281,9 +266,9 @@ components:
         description:
           type: string
         equipment_type:
-          $ref: "#/components/schemas/EquipmentType"
+          type: object
 
-    EquipmentType:
+    EquipmnetType:
       type: object
       description: "Тип технического оборудования"
       required:

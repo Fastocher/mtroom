@@ -1,4 +1,4 @@
-package NC.mtroom.Service;
+package NC.mtroom.JWTConfig.Service;
 
 import NC.mtroom.user.api.model.UserDto;
 import NC.mtroom.user.impl.entity.UserEntity;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userDao;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
@@ -24,7 +24,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userDao.findByUsername(username);
+        UserEntity userEntity = userRepository.findByUsername(username);
         if (userEntity == null ) {
             throw new UsernameNotFoundException("Пользователь с именем "+ username +" не найден ");
         }
@@ -34,9 +34,11 @@ public class JwtUserDetailsService implements UserDetailsService {
     //Сохраняет пользователя в таблицу
     public UserEntity save(UserDto user) {
         UserEntity newUser = new UserEntity();
-        newUser.setLogin(user.getUsername());
+        newUser.setLogin(user.getLogin());
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        return userDao.save(newUser);
+        return userRepository.save(newUser);
     }
+
+
 }

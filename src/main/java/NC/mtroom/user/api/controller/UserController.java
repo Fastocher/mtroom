@@ -1,5 +1,6 @@
 package NC.mtroom.user.api.controller;
 
+import NC.mtroom.room.api.service.IRoomService;
 import NC.mtroom.user.api.model.JwtRequest;
 import NC.mtroom.user.api.model.UserDto;
 import NC.mtroom.user.api.service.IUserService;
@@ -22,15 +23,21 @@ public class UserController {
         return ResponseEntity.ok(userService.loginUser(authenticationRequest));
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/register")
     public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) {
             return ResponseEntity.ok(userService.registerUser(userDto));
     }
 
-    @GetMapping("/user")
+    @GetMapping
     public ResponseEntity<?> getUser (String login) throws UsernameNotFoundException {
             return ResponseEntity.ok(userService.getUser(login));
     }
+
+    @GetMapping("/history/{username}")
+    public ResponseEntity<?> getHistory (@PathVariable String username) throws Exception{
+        return ResponseEntity.ok(userService.getUserHistory(username));
+    }
+
 }
 
 

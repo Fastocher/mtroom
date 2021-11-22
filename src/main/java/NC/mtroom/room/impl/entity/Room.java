@@ -1,12 +1,14 @@
 package NC.mtroom.room.impl.entity;
 
 
+import NC.mtroom.room.api.model.EquipmentDto;
 import NC.mtroom.user.impl.entity.History;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class Room {
 
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomID;
@@ -27,10 +30,6 @@ public class Room {
 
     @OneToMany(mappedBy = "roomID")
     private List<History> histories;
-
-
-   // @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //private List<Room> roomID;
 
     private String name;
 

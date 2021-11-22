@@ -22,13 +22,8 @@ public class History {
     private Integer historyID;
 
     @OneToMany(mappedBy = "historyID")
-//@OneToMany
-//@JoinColumns ({
-//        @JoinColumn(name="HistoryID", referencedColumnName = "historyHistoryID")
-//})
 
     private List<UserHistory> userHistories;
-
 
     private Timestamp start;
 

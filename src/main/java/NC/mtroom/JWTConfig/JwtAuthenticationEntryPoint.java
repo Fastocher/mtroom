@@ -1,4 +1,4 @@
-package NC.mtroom.Config;
+package NC.mtroom.JWTConfig;
 
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

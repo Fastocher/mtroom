@@ -1,4 +1,4 @@
-package NC.mtroom.Config;
+package NC.mtroom.JWTConfig;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
