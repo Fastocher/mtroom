@@ -1,5 +1,6 @@
 package NC.mtroom.room.impl.service;
 
+import NC.mtroom.room.api.model.*;
 import NC.mtroom.room.api.service.IRoomService;
 import NC.mtroom.room.impl.entity.Equipment;
 import NC.mtroom.room.impl.entity.EquipmentType;
