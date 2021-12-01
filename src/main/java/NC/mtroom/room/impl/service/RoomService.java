@@ -61,6 +61,7 @@ public class RoomService implements IRoomService {
 
         roomDto.setRoom_uuid(room.getRoomID());
         //currentDto.setDescription(room.);
+        roomDto.setName(room.getName());
         roomDto.setNumber_of_seats(room.getNum_of_seats());
         roomDto.setLocation(room.getLocation());
 

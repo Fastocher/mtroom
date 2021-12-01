@@ -15,7 +15,7 @@ public class RoomDto {
 
     private Long room_uuid;
 
-    private Long name;
+    private String name;
 
     private String description;
 
