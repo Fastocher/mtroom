@@ -48,7 +48,7 @@ public class RoomService implements IRoomService {
     }
 
 
-   // @Override
+    @Override
     public RoomDto getRoom(Long id) throws RoomNotFound {
 
         Room room = roomRepository.findByRoomID(id);
@@ -90,7 +90,7 @@ public class RoomService implements IRoomService {
         return roomDto;
     }
 
-  // @Override
+    @Override
     public List<TimeSegmentDto> getBooking(Long id) throws RoomNotFound{
         Room room = roomRepository.findByRoomID(id);
         if ( room.equals(null) ) {
@@ -110,7 +110,7 @@ public class RoomService implements IRoomService {
         return timeSegmentDtoLinkedList;
     }
 
-   // @Override
+   @Override
     public ResponseEntity<?> setBooking(Long id, BookingDto bookingDto) throws Exception{
 
             History history = new History();
