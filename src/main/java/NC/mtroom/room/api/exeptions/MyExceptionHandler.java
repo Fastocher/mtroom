@@ -29,7 +29,12 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RoomAlreadyBooked.class)
     protected ResponseEntity<MyException> handleRoomAlreadyBooked(){
-        return new ResponseEntity<>(new MyException("Комната на это время забронирована"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new MyException("Комната на это время забронирована"), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(HistoryNotFound.class)
+    protected ResponseEntity<MyException> handleHistoryNotFound(){
+        return new ResponseEntity<>(new MyException("Бронирование с таким ID не найдено"), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

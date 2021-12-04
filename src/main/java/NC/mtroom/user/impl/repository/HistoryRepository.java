@@ -9,4 +9,5 @@ import javax.transaction.Transactional;
 @Repository
 public interface HistoryRepository extends CrudRepository<History, Long> {
     void deleteByHistoryID(Long BookingID);
+    History findByHistoryID(Long BookingID);
 }

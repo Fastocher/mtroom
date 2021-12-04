@@ -43,7 +43,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.setBooking(id,bookingDto));
     }
     @DeleteMapping("/booking/{id}")
-    public ResponseEntity<?> deleteBooking(@PathVariable @Min(1) Long id ,@RequestParam Long bookingID){
+    public ResponseEntity<?> deleteBooking(@PathVariable @Min(1) Long id ,@RequestParam @Min(1)  Long bookingID){
         return ResponseEntity.ok(roomService.deleteBooking(id,bookingID));
     }
 

@@ -1,5 +1,6 @@
 package NC.mtroom.room.impl.service;
 
+import NC.mtroom.room.api.exeptions.HistoryNotFound;
 import NC.mtroom.room.api.exeptions.RoomAlreadyBooked;
 import NC.mtroom.room.api.model.*;
 import NC.mtroom.room.api.service.IRoomService;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -116,7 +118,7 @@ public class RoomService implements IRoomService {
     public ResponseEntity<?> setBooking(Long id, BookingDto bookingDto) {
 
             History history = new History();
-            Room room = roomRepository.findByRoomID(id);
+            Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
             Timestamp start = Timestamp.valueOf(bookingDto.getTime().getStart());
             Timestamp end = Timestamp.valueOf(bookingDto.getTime().getEnd());
 
@@ -127,7 +129,7 @@ public class RoomService implements IRoomService {
             List<History> historyList = room.getHistories();
 
             for (History historycheck : historyList) {
-                System.out.println(historycheck.getStart()+ " and " + start);
+
                 if (!(end.before(historycheck.getStart()) || end.equals(historycheck.getStart())
                         || start.after(historycheck.getEnd()) || start.equals(historycheck.getEnd()) )){
                     throw new RoomAlreadyBooked();
@@ -152,6 +154,9 @@ public class RoomService implements IRoomService {
     @Transactional
     @Override
     public ResponseEntity<?> deleteBooking(Long id,Long bookingID){
+        if (historyRepository.findByHistoryID(bookingID) == null){
+            throw new HistoryNotFound();
+        }
         historyRepository.deleteByHistoryID(bookingID);
         return ResponseEntity.ok().body("Successfully delete booking");
     }
