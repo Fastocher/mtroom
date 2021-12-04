@@ -3,9 +3,7 @@ package NC.mtroom.room.impl.entity;
 
 import NC.mtroom.room.api.model.EquipmentDto;
 import NC.mtroom.user.impl.entity.History;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -14,9 +12,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "Room")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Room {
 
 

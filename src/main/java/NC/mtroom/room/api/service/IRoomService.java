@@ -13,10 +13,10 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface IRoomService {
-    public RoomDto getRoom(Long id) throws RoomNotFound;
-    public List<TimeSegmentDto> getBooking(Long id) throws RoomNotFound;
-    public ResponseEntity setBooking(Long id, BookingDto bookingDto) throws Exception;
-    public ResponseEntity deleteBooking(Long id,Long bookingID) throws Exception;
+    public RoomDto getRoom(Long id) ;
+    public List<TimeSegmentDto> getBooking(Long id);
+    public ResponseEntity setBooking(Long id, BookingDto bookingDto) ;
+    public ResponseEntity deleteBooking(Long id,Long bookingID) ;
 
 
 }

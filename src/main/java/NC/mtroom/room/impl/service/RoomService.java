@@ -1,5 +1,6 @@
 package NC.mtroom.room.impl.service;
 
+import NC.mtroom.room.api.exeptions.RoomAlreadyBooked;
 import NC.mtroom.room.api.model.*;
 import NC.mtroom.room.api.service.IRoomService;
 import NC.mtroom.room.impl.entity.Equipment;
@@ -10,7 +11,6 @@ import NC.mtroom.room.api.exeptions.RoomNotFound;
 import NC.mtroom.room.impl.repository.EquipmentRepository;
 import NC.mtroom.room.impl.repository.RoomRepository;
 
-import NC.mtroom.user.api.model.UserHistoryDto;
 import NC.mtroom.user.impl.entity.History;
 import NC.mtroom.user.impl.entity.UserEntity;
 import NC.mtroom.user.impl.entity.UserHistory;
@@ -21,11 +21,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.time.Instant;
+
 
 @Service
 public class RoomService implements IRoomService {
@@ -50,12 +50,12 @@ public class RoomService implements IRoomService {
 
 
     @Override
-    public RoomDto getRoom(Long id) throws RoomNotFound {
-
+    public RoomDto getRoom(Long id) {
         Room room = roomRepository.findByRoomID(id);
-        if ( room.equals(null) ) {
-            throw new RoomNotFound("Комната не была найдена");
+        if ( room == null ) {
+            throw new RoomNotFound();
         }
+
 
         RoomDto roomDto = new RoomDto();
 
@@ -93,10 +93,10 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public List<TimeSegmentDto> getBooking(Long id) throws RoomNotFound{
+    public List<TimeSegmentDto> getBooking(Long id) {
         Room room = roomRepository.findByRoomID(id);
-        if ( room.equals(null) ) {
-            throw new RoomNotFound("Комната не была найдена");
+        if ( room == null ) {
+            throw new RoomNotFound();
         }
         List<History> historyList = room.getHistories();
         LinkedList<TimeSegmentDto> timeSegmentDtoLinkedList = new LinkedList<>();
@@ -113,12 +113,29 @@ public class RoomService implements IRoomService {
     }
 
    @Override
-    public ResponseEntity<?> setBooking(Long id, BookingDto bookingDto) throws Exception{
+    public ResponseEntity<?> setBooking(Long id, BookingDto bookingDto) {
 
             History history = new History();
-            history.setStart(Timestamp.valueOf(bookingDto.getTime().getStart()));
-            history.setEnd(Timestamp.valueOf(bookingDto.getTime().getEnd()));
             Room room = roomRepository.findByRoomID(id);
+            Timestamp start = Timestamp.valueOf(bookingDto.getTime().getStart());
+            Timestamp end = Timestamp.valueOf(bookingDto.getTime().getEnd());
+
+       // с помощью gethistories выцепляем все истории что закреплены за комнатой
+       // также важно чтобы выцеплялись только истории сегодняшнего дня
+       // и проверяем не пересекаются ли даты
+
+            List<History> historyList = room.getHistories();
+
+            for (History historycheck : historyList) {
+                System.out.println(historycheck.getStart()+ " and " + start);
+                if (!(end.before(historycheck.getStart()) || end.equals(historycheck.getStart())
+                        || start.after(historycheck.getEnd()) || start.equals(historycheck.getEnd()) )){
+                    throw new RoomAlreadyBooked();
+                }
+            }
+
+            history.setStart(start);
+            history.setEnd(end);
             history.setRoomID(room);
 
             historyRepository.save(history);
@@ -134,7 +151,7 @@ public class RoomService implements IRoomService {
     }
     @Transactional
     @Override
-    public ResponseEntity<?> deleteBooking(Long id,Long bookingID) throws Exception{
+    public ResponseEntity<?> deleteBooking(Long id,Long bookingID){
         historyRepository.deleteByHistoryID(bookingID);
         return ResponseEntity.ok().body("Successfully delete booking");
     }
