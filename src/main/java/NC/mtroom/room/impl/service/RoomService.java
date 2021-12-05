@@ -106,8 +106,8 @@ public class RoomService implements IRoomService {
             if (date.equals(history.getStart().toLocalDate())) {
 
                 TimeSegmentDto timeSegmentDto = new TimeSegmentDto();
-                timeSegmentDto.setStart(history.getStart().toString());
-                timeSegmentDto.setEnd(history.getEnd().toString());
+                timeSegmentDto.setStart(history.getStart());
+                timeSegmentDto.setEnd(history.getEnd());
                 timeSegmentDto.setHistoryID(history.getHistoryID());
                 timeSegmentDtoLinkedList.add(timeSegmentDto);
             }
@@ -122,8 +122,11 @@ public class RoomService implements IRoomService {
             Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.US);
-            LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
-            LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
+            LocalDateTime start = bookingDto.getTime().getStart();
+            LocalDateTime end = bookingDto.getTime().getStart();
+
+            //LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
+            //LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
 
 
        // с помощью gethistories выцепляем все истории что закреплены за комнатой
@@ -151,7 +154,7 @@ public class RoomService implements IRoomService {
             userHistory.setHistoryID(history);
 
             userHistoryRepository.save(userHistory);
-            return ResponseEntity.ok().body("Room successfully booked! BookingID = " + userHistory.getHistoryID().getHistoryID());
+            return ResponseEntity.ok().body("Room successfully booked! BookingID = ");
 
 
     }

@@ -110,8 +110,8 @@ public class UserService implements IUserService {
 
             History history = userHistory.getHistoryID();
             TimeSegmentDto time = new TimeSegmentDto(
-                    history.getStart().toString(),
-                    history.getEnd().toString(),
+                    history.getStart(),
+                    history.getEnd(),
                     history.getHistoryID()
             );
 

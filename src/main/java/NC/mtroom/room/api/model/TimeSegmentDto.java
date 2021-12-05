@@ -6,15 +6,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TimeSegmentDto {
 
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private String start;
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private String end;
+   // @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private LocalDateTime start;
+   // @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private LocalDateTime end;
 
     private Long HistoryID;
 
