@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,9 +26,9 @@ public class History {
     @OneToMany(mappedBy = "historyID", cascade = CascadeType.ALL)
     private List<UserHistory> userHistories;
 
-    private Timestamp start;
+    private LocalDateTime start;
 
-    private Timestamp end;
+    private LocalDateTime end;
 
     @JsonBackReference
     @ManyToOne

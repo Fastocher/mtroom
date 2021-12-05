@@ -3,6 +3,7 @@ package NC.mtroom.room.api.controller;
 import NC.mtroom.room.api.model.BookingDto;
 import NC.mtroom.room.api.model.RoomDto;
 import NC.mtroom.room.api.service.IRoomService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +14,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Validated
@@ -34,8 +40,8 @@ public class RoomController {
 
     // показывает время на которое забронированы комнаты
     @GetMapping("/booking/{id}")
-    public ResponseEntity<?> getBooking(@PathVariable @Min(1) Long id) {
-        return ResponseEntity.ok(roomService.getBooking(id));
+    public ResponseEntity<?> getBooking(@PathVariable @Min(1) Long id, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        return ResponseEntity.ok(roomService.getBooking(id,date));
     }
 
     @PostMapping("/booking/{id}")

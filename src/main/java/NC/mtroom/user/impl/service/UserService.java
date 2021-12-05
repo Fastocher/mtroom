@@ -11,17 +11,13 @@ import NC.mtroom.user.impl.entity.UserEntity;
 import NC.mtroom.user.impl.entity.UserHistory;
 import NC.mtroom.user.impl.repository.UserHistoryRepository;
 import NC.mtroom.user.impl.repository.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,7 +52,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public LoginDto registerUser(UserDto userDto) throws Exception{
+    public RegisterDto registerUser(UserDto userDto) throws Exception{
         UserEntity newUser = new UserEntity();
         newUser.setLogin(userDto.getLogin());
         newUser.setUsername(userDto.getUsername());
@@ -67,22 +63,28 @@ public class UserService implements IUserService {
         jwtRequest.setLogin(userDto.getLogin());
         jwtRequest.setPassword(userDto.getPassword());
 
-        LoginDto loginDto = new LoginDto();
-        loginDto.setLogin(userDto.getLogin());
-        loginDto.setName(userDto.getUsername());
-        loginDto.setToken(loginUser(jwtRequest).getToken());
-        return loginDto;
+        RegisterDto registerDto = new RegisterDto();
+        registerDto.setLogin(userDto.getLogin());
+        registerDto.setName(userDto.getUsername());
+        registerDto.setToken(loginUser(jwtRequest).getToken());
+        return registerDto;
     }
 
+
     @Override
-    public JwtResponse loginUser(JwtRequest authenticationRequest) throws Exception {
+    public LoginDto loginUser(JwtRequest authenticationRequest) throws Exception {
+
         authenticate(authenticationRequest.getLogin(), authenticationRequest.getPassword());
 
-        final CustomUserDetails customUserDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getLogin());
 
+        final CustomUserDetails customUserDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getLogin());
         final String token = jwtTokenUtil.generateToken(customUserDetails);
 
-        return new JwtResponse(token);
+        LoginDto loginDto = new LoginDto();
+        loginDto.setToken(new JwtResponse(token).getToken());
+        loginDto.setName(customUserDetails.getName());
+
+        return loginDto;
     }
 
     private void authenticate(String login, String password) throws Exception {

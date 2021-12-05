@@ -5,9 +5,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class LoginDto {
+public class RegisterDto {
 
+    private String login;
     private String name;
-
     private String token;
+
+
 }

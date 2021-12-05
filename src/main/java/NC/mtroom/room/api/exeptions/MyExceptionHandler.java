@@ -2,6 +2,7 @@ package NC.mtroom.room.api.exeptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,32 +25,32 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RoomNotFound.class)
     protected ResponseEntity<MyException> handleRoomNotFound(){
-        return new ResponseEntity<>(new MyException("Комната не найдена"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new MyException("Комната не найдена",HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RoomAlreadyBooked.class)
     protected ResponseEntity<MyException> handleRoomAlreadyBooked(){
-        return new ResponseEntity<>(new MyException("Комната на это время забронирована"), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(new MyException("Комната на это время забронирована",HttpStatus.CONFLICT), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(HistoryNotFound.class)
     protected ResponseEntity<MyException> handleHistoryNotFound(){
-        return new ResponseEntity<>(new MyException("Бронирование с таким ID не найдено"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new MyException("Бронирование с таким ID не найдено",HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<MyException> handleNumberFormatException (NumberFormatException e) {
-        return new ResponseEntity<>(new MyException("Неверный формат введённых данных: " + e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new MyException("Неверный формат введённых данных: " + e.getMessage(),HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<MyException> handleConstraintViolationException(ConstraintViolationException e) {
-        return new ResponseEntity<>(new MyException("Неверный формат введённых данных: " + e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new MyException("Неверный формат введённых данных: " + e.getMessage(),HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<MyException> handleIllegalArgumentException(IllegalArgumentException e) {
-        return new ResponseEntity<>(new MyException("Неверный формат введённых данных: " + e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new MyException("Неверный формат введённых данных: " + e.getMessage(),HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
 
@@ -59,7 +60,7 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
 
-        return new ResponseEntity<Object>(new MyException(ex.getCause().getMessage()),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Object>(new MyException(ex.getCause().getMessage(),HttpStatus.BAD_REQUEST),HttpStatus.BAD_REQUEST);
     }
 
     //Ошибки по валидации
@@ -71,7 +72,7 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .findFirst()
             .orElse(ex.getMessage());
-        return new ResponseEntity<Object>(new MyException(errorMessage),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Object>(new MyException(errorMessage,HttpStatus.BAD_REQUEST),HttpStatus.BAD_REQUEST);
 }
 
     //Ошибка к обращению к несуществующим эндпоинтам
@@ -81,7 +82,7 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders httpHeaders,
             HttpStatus httpStatus,
             WebRequest webRequest){
-        return new ResponseEntity<Object>(new MyException("Такого пути не существует"),HttpStatus.NOT_FOUND);
+        return new ResponseEntity<Object>(new MyException("Такого пути не существует",HttpStatus.BAD_REQUEST),HttpStatus.NOT_FOUND);
     }
 
 
@@ -89,5 +90,6 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
     @AllArgsConstructor
     private static class MyException{
         private String message;
+        private HttpStatus status;
     }
 }

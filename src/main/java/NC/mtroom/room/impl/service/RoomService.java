@@ -2,16 +2,14 @@ package NC.mtroom.room.impl.service;
 
 import NC.mtroom.room.api.exeptions.HistoryNotFound;
 import NC.mtroom.room.api.exeptions.RoomAlreadyBooked;
+import NC.mtroom.room.api.exeptions.RoomNotFound;
 import NC.mtroom.room.api.model.*;
 import NC.mtroom.room.api.service.IRoomService;
 import NC.mtroom.room.impl.entity.Equipment;
 import NC.mtroom.room.impl.entity.EquipmentType;
 import NC.mtroom.room.impl.entity.Room;
-import NC.mtroom.room.api.exeptions.RoomNotFound;
-
 import NC.mtroom.room.impl.repository.EquipmentRepository;
 import NC.mtroom.room.impl.repository.RoomRepository;
-
 import NC.mtroom.user.impl.entity.History;
 import NC.mtroom.user.impl.entity.UserEntity;
 import NC.mtroom.user.impl.entity.UserHistory;
@@ -22,11 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 
 @Service
@@ -92,22 +91,27 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public List<TimeSegmentDto> getBooking(Long id) {
+    public List<TimeSegmentDto> getBooking(Long id, LocalDate date) {
         Room room = roomRepository.findByRoomID(id);
         if ( room == null ) {
             throw new RoomNotFound();
+        }
+        if (date == null){
+            date = LocalDate.now();
         }
         List<History> historyList = room.getHistories();
         LinkedList<TimeSegmentDto> timeSegmentDtoLinkedList = new LinkedList<>();
         for (History history : historyList)
         {
-            TimeSegmentDto timeSegmentDto = new TimeSegmentDto();
-            timeSegmentDto.setStart(history.getStart().toString());
-            timeSegmentDto.setEnd(history.getEnd().toString());
-            timeSegmentDto.setHistoryID(history.getHistoryID());
-            timeSegmentDtoLinkedList.add(timeSegmentDto);
-        }
+            if (date.equals(history.getStart().toLocalDate())) {
 
+                TimeSegmentDto timeSegmentDto = new TimeSegmentDto();
+                timeSegmentDto.setStart(history.getStart().toString());
+                timeSegmentDto.setEnd(history.getEnd().toString());
+                timeSegmentDto.setHistoryID(history.getHistoryID());
+                timeSegmentDtoLinkedList.add(timeSegmentDto);
+            }
+        }
         return timeSegmentDtoLinkedList;
     }
 
@@ -116,8 +120,11 @@ public class RoomService implements IRoomService {
 
             History history = new History();
             Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
-            Timestamp start = Timestamp.valueOf(bookingDto.getTime().getStart());
-            Timestamp end = Timestamp.valueOf(bookingDto.getTime().getEnd());
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.US);
+            LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
+            LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
+
 
        // с помощью gethistories выцепляем все истории что закреплены за комнатой
        // также важно чтобы выцеплялись только истории сегодняшнего дня
@@ -126,9 +133,8 @@ public class RoomService implements IRoomService {
             List<History> historyList = room.getHistories();
 
             for (History historycheck : historyList) {
-
-                if (!(end.before(historycheck.getStart()) || end.equals(historycheck.getStart())
-                        || start.after(historycheck.getEnd()) || start.equals(historycheck.getEnd()) )){
+                if (!(end.isBefore(historycheck.getStart()) || end.isEqual(historycheck.getStart())
+                        || start.isAfter(historycheck.getEnd()) || start.isEqual(historycheck.getEnd()) )){
                     throw new RoomAlreadyBooked();
                 }
             }
@@ -146,6 +152,7 @@ public class RoomService implements IRoomService {
 
             userHistoryRepository.save(userHistory);
             return ResponseEntity.ok().body("Room successfully booked! BookingID = " + userHistory.getHistoryID().getHistoryID());
+
 
     }
     @Transactional

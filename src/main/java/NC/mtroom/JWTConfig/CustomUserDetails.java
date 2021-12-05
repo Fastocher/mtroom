@@ -14,6 +14,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
+    private String name;
     private String login;
     private String password;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
@@ -24,10 +25,11 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public static CustomUserDetails fromUserEntityToCustomUserDetails(UserEntity userEntity) {
-        CustomUserDetails c = new CustomUserDetails();
-        c.login = userEntity.getLogin();
-        c.password = userEntity.getPassword();
-        return c;
+        CustomUserDetails customUserDetails = new CustomUserDetails();
+        customUserDetails.name = userEntity.getUsername();
+        customUserDetails.login = userEntity.getLogin();
+        customUserDetails.password = userEntity.getPassword();
+        return customUserDetails;
     }
 
     @Override
