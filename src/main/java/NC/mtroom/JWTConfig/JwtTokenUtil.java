@@ -24,7 +24,7 @@ public class JwtTokenUtil implements Serializable {
     private String secret;
 
     //получение имени из токена
-    public String getUsernameFromToken(String token) {
+    public String getLoginFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -51,9 +51,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //создание токена
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(CustomUserDetails customUserDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        return doGenerateToken(claims, customUserDetails.getLogin());
     }
 
     //Шифрование по алгоритму
@@ -66,7 +66,7 @@ public class JwtTokenUtil implements Serializable {
 
     //Проверка валидности
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
+        final String username = getLoginFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 

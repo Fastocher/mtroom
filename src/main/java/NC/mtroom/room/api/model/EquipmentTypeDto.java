@@ -11,6 +11,4 @@ public class EquipmentTypeDto {
 
     private String name;
 
-    private String description;
-
 }

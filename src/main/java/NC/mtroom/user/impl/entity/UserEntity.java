@@ -22,6 +22,7 @@ public class UserEntity {
     @JsonIgnore
     private Long userID;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "userID")
     private List<UserHistory> userHistories;
 

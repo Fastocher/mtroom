@@ -18,8 +18,6 @@ public class RoomDto {
 
     private String name;
 
-//    private String description;
-
     //private PhotoURLs photoURLs;
 
     private Long number_of_seats;

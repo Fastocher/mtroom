@@ -23,5 +23,4 @@ public class EquipmentType {
 
     private String name;
 
-    private String description;
 }

@@ -35,14 +35,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
 
-        String username = null;
+        String login = null;
         String jwtToken = null;
 
         if(requestTokenHeader != null && requestTokenHeader.startsWith("Bearer_")) {
             jwtToken = requestTokenHeader.substring(7);
 
             try{
-                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                login = jwtTokenUtil.getLoginFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 System.out.println("Не удаётся получить JWT Token");
             } catch (ExpiredJwtException e) {
@@ -50,13 +50,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if(login != null && SecurityContextHolder.getContext().getAuthentication() == null){
 
-            UserDetails userDetails= this.jwtUserDetailsService.loadUserByUsername(username);
+            CustomUserDetails customUserDetails= this.jwtUserDetailsService.loadUserByUsername(login);
 
-            if (jwtTokenUtil.validateToken(jwtToken,userDetails)){
+            if (jwtTokenUtil.validateToken(jwtToken,customUserDetails)){
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,null,userDetails.getAuthorities());
+                        customUserDetails,null,customUserDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }

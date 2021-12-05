@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface RoomRepository extends CrudRepository<Room, Long> {
-    Room findByName(String Name);
     Room findByRoomID(Long RoomID);
 
 }

@@ -19,7 +19,7 @@ public class UserHistory {
     @Column(name = "id",unique=true, nullable = false)
     private Long id;
 
-    private boolean isOrg;
+    private boolean isAdmin;
 
 
     @JsonBackReference

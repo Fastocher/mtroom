@@ -15,8 +15,6 @@ public class EquipmentDto {
 
     private String name;
 
-    private String description;
-
     private List<EquipmentTypeDto> equipmentType;
 
 }

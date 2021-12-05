@@ -16,5 +16,6 @@ public class TimeSegmentDto {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private String end;
 
+    private Long HistoryID;
 
 }

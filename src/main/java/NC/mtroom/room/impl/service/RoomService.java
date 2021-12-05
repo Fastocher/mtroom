@@ -62,7 +62,6 @@ public class RoomService implements IRoomService {
         RoomDto roomDto = new RoomDto();
 
         roomDto.setRoom_uuid(room.getRoomID());
-        //currentDto.setDescription(room.);
         roomDto.setName(room.getName());
         roomDto.setNumber_of_seats(room.getNum_of_seats());
         roomDto.setLocation(room.getLocation());
@@ -81,9 +80,7 @@ public class RoomService implements IRoomService {
                 for (EquipmentType equipmentType : equipmentTypeList)
                 {
                     EquipmentTypeDto equipmentTypeDto = new EquipmentTypeDto(); //по образу и подобию
-                    equipmentTypeDto.setDescription(equipmentType.getDescription());
                     equipmentTypeDto.setName(equipmentType.getName());
-
                     equipmentTypeDtoLinkedList.add(equipmentTypeDto);
                 }
             equipmentDto.setEquipmentType(equipmentTypeDtoLinkedList); // добавляю список типов в список приборов
@@ -107,7 +104,7 @@ public class RoomService implements IRoomService {
             TimeSegmentDto timeSegmentDto = new TimeSegmentDto();
             timeSegmentDto.setStart(history.getStart().toString());
             timeSegmentDto.setEnd(history.getEnd().toString());
-
+            timeSegmentDto.setHistoryID(history.getHistoryID());
             timeSegmentDtoLinkedList.add(timeSegmentDto);
         }
 
@@ -144,7 +141,7 @@ public class RoomService implements IRoomService {
             UserHistory userHistory = new UserHistory();
             UserEntity userEntity = userRepository.findByUsername(bookingDto.getAdmin());
             userHistory.setUserID(userEntity);
-            userHistory.setOrg(true);
+            userHistory.setAdmin(true);
             userHistory.setHistoryID(history);
 
             userHistoryRepository.save(userHistory);
