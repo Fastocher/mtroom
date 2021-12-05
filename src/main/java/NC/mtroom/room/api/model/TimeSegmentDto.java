@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 public class TimeSegmentDto {
 
    // @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private LocalDateTime start;
+    private String start;
    // @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private LocalDateTime end;
+    private String end;
 
     private Long HistoryID;
 
