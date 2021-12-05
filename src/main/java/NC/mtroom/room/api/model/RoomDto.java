@@ -18,7 +18,7 @@ public class RoomDto {
 
     private String name;
 
-    private String description;
+//    private String description;
 
     //private PhotoURLs photoURLs;
 

@@ -35,7 +35,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserEntity save(UserDto user) {
         UserEntity newUser = new UserEntity();
         newUser.setLogin(user.getLogin());
-        newUser.setUsername(user.getUsername());
+        newUser.setUsername(user.getName());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userRepository.save(newUser);
     }

@@ -80,17 +80,12 @@ paths:
       parameters:
         - name: room_uuid
           in: path
-          required: true
+          required: false
           schema:
             type: integer
-        - name: equipment
-          in: query
-          description: "Flag for collecting info about room equipment or not"
-          schema:
-            type: boolean
       responses:
         200:
-          description: "Room with uuid {room_uuid}"
+          description: "Room with uuid {room_uuid} or all rooms"
           content:
             application/json:
               schema:
@@ -133,11 +128,11 @@ paths:
           schema:
             type: integer
           required: true
-        - name: start_date
+        - name: date
           in: query
           schema:
             type: string
-            description: "Start date to check booked segments, isoformat "
+            description: "Date to check booked segments, isoformat "
       security:
         - bearerAuth: []
       responses:
@@ -224,8 +219,6 @@ components:
           type: integer
         name:
           type: string
-        description:
-          type: string
         photoURLs:
           type: array
           items:
@@ -243,6 +236,7 @@ components:
       required:
         - start
         - end
+        - historyID
       properties:
         start:
           type: string
@@ -250,6 +244,9 @@ components:
         end:
           type: string
           description: "time iso format"
+        historyID:
+          type: number
+          description: "Unique id of booking"
 
     EquipmentDTO:
       type: object
@@ -263,8 +260,6 @@ components:
           type: integer
         name:
           type: string
-        description:
-          type: string
         equipment_type:
           type: object
 
@@ -276,19 +271,14 @@ components:
       properties:
         name:
           type: string
-        description:
-          type: string
 
     TokenResponseDTO:
       type: object
-      description: "JWT токены пользователя"
+      description: "JWT токен пользователя"
       required:
-        - accessToken
-        - refreshToken
+        - token
       properties:
-        accessToken:
-          type: string
-        refreshToken:
+        token:
           type: string
 
     UserHistoryDTO:

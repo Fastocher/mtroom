@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 public class UserDto {
 
     private String login;
-    private String Username;
+    private String name;
     private String password;
 
 }
