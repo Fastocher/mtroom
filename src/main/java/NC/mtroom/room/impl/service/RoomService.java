@@ -121,7 +121,7 @@ public class RoomService implements IRoomService {
             History history = new History();
             Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.US);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 //            LocalDateTime start = bookingDto.getTime().getStart();
 //            LocalDateTime end = bookingDto.getTime().getStart();
 
