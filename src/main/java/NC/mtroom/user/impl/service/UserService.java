@@ -109,12 +109,13 @@ public class UserService implements IUserService {
 
     @Override
     public List<UserHistoryDto> getUserHistory(String login) {
-        LinkedList<UserHistoryDto> answer =  new LinkedList<>();
 
         UserEntity userEntity = userRepository.findByLogin(login);
         if (userEntity == null) {
             throw new UserNotFound(login);
         }
+
+        LinkedList<UserHistoryDto> answer =  new LinkedList<>();
         ArrayList<UserHistory> userHistoryList = (ArrayList<UserHistory>) userHistoryRepository.findAllByUserID(userEntity);
 
         for (UserHistory userHistory : userHistoryList) {
