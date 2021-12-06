@@ -1,5 +1,7 @@
 package NC.mtroom.room.api.exeptions;
 
+import NC.mtroom.user.api.exeptions.UserAlreadyExist;
+import NC.mtroom.user.api.exeptions.UserNotFound;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
@@ -25,18 +27,33 @@ import java.util.Locale;
 public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RoomNotFound.class)
-    protected ResponseEntity<MyException> handleRoomNotFound(){
-        return new ResponseEntity<>(new MyException("Room doesn't exist",HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value()),HttpStatus.NOT_FOUND);
+    protected ResponseEntity<MyException> handleRoomNotFound(RoomNotFound e){
+        return new ResponseEntity<>(new MyException(e.getMessage(), HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value()),HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserAlreadyExist.class)
+    protected ResponseEntity<MyException> handleUserAlreadyExist(UserAlreadyExist e){
+        return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFound.class)
+    protected ResponseEntity<MyException> handleUserNotFound(UserNotFound e){
+        return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value()),HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidCredentials.class)
+    protected ResponseEntity<MyException> handleInvalidCredentials(InvalidCredentials e){
+        return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RoomAlreadyBooked.class)
-    protected ResponseEntity<MyException> handleRoomAlreadyBooked(){
-        return new ResponseEntity<>(new MyException("Room booked ",HttpStatus.CONFLICT,HttpStatus.CONFLICT.value()), HttpStatus.CONFLICT);
+    protected ResponseEntity<MyException> handleRoomAlreadyBooked(RoomAlreadyBooked e){
+        return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.CONFLICT,HttpStatus.CONFLICT.value()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(HistoryNotFound.class)
-    protected ResponseEntity<MyException> handleHistoryNotFound(){
-        return new ResponseEntity<>(new MyException("No such booking ID",HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    protected ResponseEntity<MyException> handleHistoryNotFound(HistoryNotFound e){
+        return new ResponseEntity<>(new MyException(e.getMessage(), HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -60,7 +77,6 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
-
         return new ResponseEntity<Object>(new MyException(ex.getCause().getMessage(),HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
     }
 
@@ -90,8 +106,8 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
     @Data
     @AllArgsConstructor
     private static class MyException{
-        private String message;
-        private HttpStatus status;
-        private int status_code;
+        private String body;
+        private HttpStatus statusCode;
+        private int statusCodeValue;
     }
 }

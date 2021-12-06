@@ -54,7 +54,7 @@ public class RoomService implements IRoomService {
     public RoomDto getRoom(Long id) {
         Room room = roomRepository.findByRoomID(id);
         if ( room == null ) {
-            throw new RoomNotFound();
+            throw new RoomNotFound(id);
         }
 
 
@@ -94,7 +94,7 @@ public class RoomService implements IRoomService {
     public List<TimeSegmentDto> getBooking(Long id, LocalDate date) {
         Room room = roomRepository.findByRoomID(id);
         if ( room == null ) {
-            throw new RoomNotFound();
+            throw new RoomNotFound(id);
         }
         if (date == null){
             date = LocalDate.now();
@@ -138,7 +138,7 @@ public class RoomService implements IRoomService {
             for (History historycheck : historyList) {
                 if (!(end.isBefore(historycheck.getStart()) || end.isEqual(historycheck.getStart())
                         || start.isAfter(historycheck.getEnd()) || start.isEqual(historycheck.getEnd()) )){
-                    throw new RoomAlreadyBooked();
+                    throw new RoomAlreadyBooked(start,end);
                 }
             }
 
@@ -162,7 +162,7 @@ public class RoomService implements IRoomService {
     @Override
     public ResponseEntity<?> deleteBooking(Long id,Long bookingID){
         if (historyRepository.findByHistoryID(bookingID) == null){
-            throw new HistoryNotFound();
+            throw new HistoryNotFound(bookingID);
         }
         historyRepository.deleteByHistoryID(bookingID);
         return ResponseEntity.ok().body("Successfully delete booking");

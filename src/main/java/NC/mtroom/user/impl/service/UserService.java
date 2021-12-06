@@ -3,7 +3,11 @@ package NC.mtroom.user.impl.service;
 import NC.mtroom.JWTConfig.CustomUserDetails;
 import NC.mtroom.JWTConfig.JwtTokenUtil;
 import NC.mtroom.JWTConfig.Service.JwtUserDetailsService;
+import NC.mtroom.room.api.exeptions.InvalidCredentials;
+import NC.mtroom.room.api.exeptions.RoomNotFound;
 import NC.mtroom.room.api.model.TimeSegmentDto;
+import NC.mtroom.user.api.exeptions.UserAlreadyExist;
+import NC.mtroom.user.api.exeptions.UserNotFound;
 import NC.mtroom.user.api.model.*;
 import NC.mtroom.user.api.service.IUserService;
 import NC.mtroom.user.impl.entity.History;
@@ -11,6 +15,8 @@ import NC.mtroom.user.impl.entity.UserEntity;
 import NC.mtroom.user.impl.entity.UserHistory;
 import NC.mtroom.user.impl.repository.UserHistoryRepository;
 import NC.mtroom.user.impl.repository.UserRepository;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -18,6 +24,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,12 +59,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public RegisterDto registerUser(UserDto userDto) throws Exception{
+    public RegisterDto registerUser(UserDto userDto) throws UserAlreadyExist {
         UserEntity newUser = new UserEntity();
         newUser.setLogin(userDto.getLogin());
         newUser.setUsername(userDto.getUsername());
         newUser.setPassword(bcryptEncoder.encode(userDto.getPassword()));
-        userRepository.save(newUser);
+        try {
+            userRepository.save(newUser);
+        } catch (DataIntegrityViolationException e){
+            throw new UserAlreadyExist(newUser.getLogin());
+        }
 
         JwtRequest jwtRequest = new JwtRequest();
         jwtRequest.setLogin(userDto.getLogin());
@@ -72,7 +83,7 @@ public class UserService implements IUserService {
 
 
     @Override
-    public LoginDto loginUser(JwtRequest authenticationRequest) throws Exception {
+    public LoginDto loginUser(JwtRequest authenticationRequest) throws UserAlreadyExist {
 
         authenticate(authenticationRequest.getLogin(), authenticationRequest.getPassword());
 
@@ -87,22 +98,23 @@ public class UserService implements IUserService {
         return loginDto;
     }
 
-    private void authenticate(String login, String password) throws Exception {
+    private void authenticate(String login, String password) throws InvalidCredentials {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new InvalidCredentials();
         }
     }
 
 
     @Override
-    public List<UserHistoryDto> getUserHistory(String username) {
+    public List<UserHistoryDto> getUserHistory(String login) {
         LinkedList<UserHistoryDto> answer =  new LinkedList<>();
 
-        UserEntity userEntity = userRepository.findByUsername(username);
+        UserEntity userEntity = userRepository.findByLogin(login);
+        if (userEntity == null) {
+            throw new UserNotFound(login);
+        }
         ArrayList<UserHistory> userHistoryList = (ArrayList<UserHistory>) userHistoryRepository.findAllByUserID(userEntity);
 
         for (UserHistory userHistory : userHistoryList) {

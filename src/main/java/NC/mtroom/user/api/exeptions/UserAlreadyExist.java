@@ -1,7 +1,7 @@
 package NC.mtroom.user.api.exeptions;
 
-public class UserAlreadyExist extends Exception {
+public class UserAlreadyExist extends RuntimeException {
     public UserAlreadyExist(String message) {
-        super(message);
+        super("User with login = '" +message + "' already exist");
     }
 }

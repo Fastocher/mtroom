@@ -15,12 +15,13 @@ import java.io.Serializable;
 public class JwtRequest implements Serializable {
     private static final long serialVersionUID = 5926468583005150707L;
 
-    @NotBlank(message = "Имя пользователя не должно быть пустым")
+    @NotBlank(message = "Login can't be null")
+    @Pattern(regexp = "[a-z0-9A-Z_]+",message = "Not available characters for login! Only a-z, 0-9, '_' available")
     private String login;
 
-    @NotBlank(message = "Пароль не должен быть пустым")
-    @Size(min = 1, max = 15,message = "Допустимое число символов пароля - 15")
-//    @Pattern(regexp = "!(^[@#$%^&+=])")
+    @NotBlank(message = "Password can't be null")
+    @Size(min = 5,max = 15,message = "Password must be between 5 and 15 characters long")
+    @Pattern(regexp = "[^ ]+",message = "Password can't include space")
     private String password;
 
 }

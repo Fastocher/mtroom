@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -26,6 +27,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "userID")
     private List<UserHistory> userHistories;
 
+    @Column(name = "login",unique = true)
     private String login;
 
     private String username;
