@@ -22,7 +22,7 @@ public class BookingDto {
     @NotNull(message = "Поле Room_id не найдено")
     private Long room_uuid;
 
-    @Valid
+
     private TimeSegmentDto time;
 
 //    private InvitedUsers users;

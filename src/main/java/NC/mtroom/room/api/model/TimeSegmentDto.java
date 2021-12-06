@@ -13,11 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TimeSegmentDto {
 
-   // @DateTimeFormat(pattern = "dd.MM.yyyy")
     private String start;
-   // @DateTimeFormat(pattern = "dd.MM.yyyy")
     private String end;
-
     private Long HistoryID;
 
 }
