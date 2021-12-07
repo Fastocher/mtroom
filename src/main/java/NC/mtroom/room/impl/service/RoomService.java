@@ -110,6 +110,7 @@ public class RoomService implements IRoomService {
                 timeSegmentDto.setStart(history.getStart().toString());
                 timeSegmentDto.setEnd(history.getEnd().toString());
                 timeSegmentDto.setHistoryID(history.getHistoryID());
+                timeSegmentDto.setTitle(history.getTitle());
                 timeSegmentDtoLinkedList.add(timeSegmentDto);
             }
         }
@@ -151,6 +152,7 @@ public class RoomService implements IRoomService {
             history.setStart(start);
             history.setEnd(end);
             history.setRoomID(room);
+            history.setTitle(bookingDto.getTitle());
             historyRepository.save(history);
 
 

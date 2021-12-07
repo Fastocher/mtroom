@@ -15,6 +15,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class BookingDto {
 
+    @NotNull(message = "Поле Title не найдено")
+    @NotBlank(message = "Поле Title не должно быть пустым")
+    private String title;
+
     @NotNull(message = "Поле Admin не найдено")
     @NotBlank(message = "Поле Admin не должно быть пустым")
     private String admin;

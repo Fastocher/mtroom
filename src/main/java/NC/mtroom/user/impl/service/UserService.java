@@ -125,7 +125,8 @@ public class UserService implements IUserService {
             TimeSegmentDto time = new TimeSegmentDto(
                     history.getStart().toString(),
                     history.getEnd().toString(),
-                    history.getHistoryID()
+                    history.getHistoryID(),
+                    history.getTitle()
             );
 
             currentDTO.setRoom_uuid(history.getRoomID().getRoomID());

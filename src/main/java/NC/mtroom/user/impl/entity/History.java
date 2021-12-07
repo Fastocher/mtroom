@@ -23,12 +23,15 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long historyID;
 
+    private String title;
+
     @OneToMany(mappedBy = "historyID", cascade = CascadeType.ALL)
     private List<UserHistory> userHistories;
 
     private LocalDateTime start;
 
     private LocalDateTime end;
+
 
     @JsonBackReference
     @ManyToOne

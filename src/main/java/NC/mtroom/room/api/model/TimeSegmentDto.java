@@ -16,5 +16,6 @@ public class TimeSegmentDto {
     private String start;
     private String end;
     private Long HistoryID;
+    private String title;
 
 }
