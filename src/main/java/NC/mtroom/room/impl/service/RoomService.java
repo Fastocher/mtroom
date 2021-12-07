@@ -10,6 +10,7 @@ import NC.mtroom.room.impl.entity.EquipmentType;
 import NC.mtroom.room.impl.entity.Room;
 import NC.mtroom.room.impl.repository.EquipmentRepository;
 import NC.mtroom.room.impl.repository.RoomRepository;
+import NC.mtroom.user.api.exeptions.UserNotFound;
 import NC.mtroom.user.impl.entity.History;
 import NC.mtroom.user.impl.entity.UserEntity;
 import NC.mtroom.user.impl.entity.UserHistory;
@@ -120,11 +121,16 @@ public class RoomService implements IRoomService {
 
             History history = new History();
             Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
+            if (room == null ) {
+                throw new RoomNotFound(bookingDto.getRoom_uuid());
+            }
+
+            UserEntity userEntity = userRepository.findByLogin(bookingDto.getAdmin());
+            if (userEntity == null){
+               throw new UserNotFound(bookingDto.getAdmin());
+            }
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-//            LocalDateTime start = bookingDto.getTime().getStart();
-//            LocalDateTime end = bookingDto.getTime().getStart();
-
             LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
             LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
 
@@ -145,10 +151,12 @@ public class RoomService implements IRoomService {
             history.setStart(start);
             history.setEnd(end);
             history.setRoomID(room);
-
             historyRepository.save(history);
+
+
+
+
             UserHistory userHistory = new UserHistory();
-            UserEntity userEntity = userRepository.findByUsername(bookingDto.getAdmin());
             userHistory.setUserID(userEntity);
             userHistory.setAdmin(true);
             userHistory.setHistoryID(history);
