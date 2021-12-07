@@ -12,8 +12,8 @@ import java.util.List;
 public interface IRoomService {
     public RoomDto getRoom(Long id) ;
     public List<TimeSegmentDto> getBooking(Long id, LocalDate date);
-    public ResponseEntity setBooking(Long id, BookingDto bookingDto) ;
-    public ResponseEntity deleteBooking(Long id,Long bookingID) ;
+    public ResponseEntity setBooking(BookingDto bookingDto) ;
+    public ResponseEntity deleteBooking(Long bookingID) ;
 
 
 }

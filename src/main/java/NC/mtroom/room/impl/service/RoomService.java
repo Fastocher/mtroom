@@ -116,7 +116,7 @@ public class RoomService implements IRoomService {
     }
 
    @Override
-    public ResponseEntity<?> setBooking(Long id, BookingDto bookingDto) {
+    public ResponseEntity<?> setBooking(BookingDto bookingDto) {
 
             History history = new History();
             Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
@@ -154,13 +154,13 @@ public class RoomService implements IRoomService {
             userHistory.setHistoryID(history);
 
             userHistoryRepository.save(userHistory);
-            return ResponseEntity.ok().body("Room successfully booked! BookingID = ");
+            return ResponseEntity.ok().body("Room successfully booked!");
 
 
     }
     @Transactional
     @Override
-    public ResponseEntity<?> deleteBooking(Long id,Long bookingID){
+    public ResponseEntity<?> deleteBooking(Long bookingID){
         if (historyRepository.findByHistoryID(bookingID) == null){
             throw new HistoryNotFound(bookingID);
         }

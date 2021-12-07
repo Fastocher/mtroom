@@ -44,13 +44,13 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getBooking(id,date));
     }
 
-    @PostMapping("/booking/{id}")
-    public ResponseEntity<?> setBooking(@PathVariable @Min(1) Long id, @RequestBody @Valid BookingDto bookingDto){
-        return ResponseEntity.ok(roomService.setBooking(id,bookingDto));
+    @PostMapping("/booking/")
+    public ResponseEntity<?> setBooking(@RequestBody @Valid BookingDto bookingDto){
+        return ResponseEntity.ok(roomService.setBooking(bookingDto));
     }
-    @DeleteMapping("/booking/{id}")
-    public ResponseEntity<?> deleteBooking(@PathVariable @Min(1) Long id ,@RequestParam @Min(1)  Long bookingID){
-        return ResponseEntity.ok(roomService.deleteBooking(id,bookingID));
+    @DeleteMapping("/booking/")
+    public ResponseEntity<?> deleteBooking(@RequestParam @Min(1)  Long bookingID){
+        return ResponseEntity.ok(roomService.deleteBooking(bookingID));
     }
 
 
