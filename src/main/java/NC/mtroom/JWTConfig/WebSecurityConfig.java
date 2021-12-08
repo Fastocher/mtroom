@@ -3,6 +3,7 @@ package NC.mtroom.JWTConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -48,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 //для регистрации и входа отключим защиту
-                .authorizeRequests().antMatchers("/user/register", "/user/login", "/room/{id}", "/room/booking/{id}").permitAll().
+                .authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/user/register", "/user/login", "/room/{id}", "/room/booking/{id}").permitAll().
                 //для всего остального включим
                 anyRequest().authenticated().and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
