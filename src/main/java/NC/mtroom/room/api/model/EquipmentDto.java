@@ -14,7 +14,6 @@ public class EquipmentDto {
     private Long eqID;
 
     private String name;
-
     private List<EquipmentTypeDto> equipmentType;
 
 }

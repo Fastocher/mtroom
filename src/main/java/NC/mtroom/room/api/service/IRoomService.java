@@ -6,7 +6,6 @@ import NC.mtroom.room.api.model.TimeSegmentDto;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IRoomService {

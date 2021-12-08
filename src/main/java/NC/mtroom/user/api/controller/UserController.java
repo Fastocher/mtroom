@@ -1,7 +1,5 @@
 package NC.mtroom.user.api.controller;
 
-import NC.mtroom.room.api.service.IRoomService;
-import NC.mtroom.user.api.exeptions.UserNotFound;
 import NC.mtroom.user.api.model.JwtRequest;
 import NC.mtroom.user.api.model.UserDto;
 import NC.mtroom.user.api.service.IUserService;
@@ -36,6 +34,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<?> getUser (String login) throws UsernameNotFoundException {
             return ResponseEntity.ok(userService.getUser(login));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers () throws UsernameNotFoundException {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/history/{login}")

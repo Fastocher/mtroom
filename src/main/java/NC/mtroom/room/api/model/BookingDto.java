@@ -3,12 +3,10 @@ package NC.mtroom.room.api.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,5 +27,5 @@ public class BookingDto {
 
     private TimeSegmentDto time;
 
-//    private InvitedUsers users;
+    private List<String> invited_users;
 }

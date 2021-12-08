@@ -120,7 +120,7 @@ public class RoomService implements IRoomService {
    @Override
     public ResponseEntity<?> setBooking(BookingDto bookingDto) {
 
-            History history = new History();
+
             Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
             if (room == null ) {
                 throw new RoomNotFound(bookingDto.getRoom_uuid());
@@ -148,20 +148,37 @@ public class RoomService implements IRoomService {
                     throw new RoomAlreadyBooked(start,end);
                 }
             }
-
+            History history = new History();
             history.setStart(start);
             history.setEnd(end);
             history.setRoomID(room);
             history.setTitle(bookingDto.getTitle());
+            history.setInvited_users(bookingDto.getInvited_users());
             historyRepository.save(history);
 
-
+       //Добавляю в историю колонку Invited users (массив)
+       //С post запросом принимаю и записываю в колонку юзеров
+       //Сделать функцию которая бы возвращала List of UserEntity по List of logins
+       //Сразу прохожусь по массиву и каждому юзеру добавляю в User_history запись о том что он забукан на встречу
 
 
             UserHistory userHistory = new UserHistory();
-            userHistory.setUserID(userEntity);
-            userHistory.setAdmin(true);
-            userHistory.setHistoryID(history);
+//            Iterable<UserEntity> allUsers = userRepository.findAll();
+//
+//
+//            for(String user : bookingDto.getInvited_users()){
+//                for(UserEntity userEntity1 : allUsers){
+//
+//                }
+//                userHistory.setUserID(userEntity);
+//                userHistory.setAdmin(true);
+//                userHistory.setHistoryID(history);
+//            }
+
+
+                userHistory.setUserID(userEntity);
+                userHistory.setAdmin(true);
+                userHistory.setHistoryID(history);
 
             userHistoryRepository.save(userHistory);
             return ResponseEntity.ok().body("Room successfully booked!");

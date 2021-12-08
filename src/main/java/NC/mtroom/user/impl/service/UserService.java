@@ -4,7 +4,6 @@ import NC.mtroom.JWTConfig.CustomUserDetails;
 import NC.mtroom.JWTConfig.JwtTokenUtil;
 import NC.mtroom.JWTConfig.Service.JwtUserDetailsService;
 import NC.mtroom.room.api.exeptions.InvalidCredentials;
-import NC.mtroom.room.api.exeptions.RoomNotFound;
 import NC.mtroom.room.api.model.TimeSegmentDto;
 import NC.mtroom.user.api.exeptions.UserAlreadyExist;
 import NC.mtroom.user.api.exeptions.UserNotFound;
@@ -15,16 +14,13 @@ import NC.mtroom.user.impl.entity.UserEntity;
 import NC.mtroom.user.impl.entity.UserHistory;
 import NC.mtroom.user.impl.repository.UserHistoryRepository;
 import NC.mtroom.user.impl.repository.UserRepository;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,6 +52,10 @@ public class UserService implements IUserService {
     @Override
     public UserEntity getUser(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public Iterable<UserEntity> getAllUsers(){
+        return userRepository.findAll();
     }
 
     @Override

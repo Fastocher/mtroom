@@ -2,20 +2,20 @@ package NC.mtroom.user.impl.entity;
 
 import NC.mtroom.room.impl.entity.Room;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.mapping.Array;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "history")
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class History {
 
@@ -31,6 +31,11 @@ public class History {
     private LocalDateTime start;
 
     private LocalDateTime end;
+
+    @ElementCollection
+    @CollectionTable(name = "historyInvited_users", joinColumns = @JoinColumn(name = "history_historyid"))
+    @Column(name = "invited_users")
+    private List<String> invited_users;
 
 
     @JsonBackReference
