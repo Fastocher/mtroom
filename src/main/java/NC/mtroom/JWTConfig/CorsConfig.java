@@ -16,7 +16,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry corsRegistry){
                 corsRegistry.addMapping("/*")
-                        .allowedMethods("GET","POST","PUT","DELETE")
+                        .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                         .allowedHeaders("*")
                         .allowedOrigins("http://localhost:8080","https://app-qroom.herokuapp.com");
             }
