@@ -47,9 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //Задаем где будет использваться аутентификация
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/room/booking/{id}").permitAll();
         httpSecurity.csrf().disable()
                 //для регистрации и входа отключим защиту
-                .authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/user/register", "/user/login", "/room/{id}", "/room/booking/{id}").permitAll().
+                .authorizeRequests().antMatchers("/user/register", "/user/login", "/room/{id}","/room/booking/{id}").permitAll().
                 //для всего остального включим
                 anyRequest().authenticated().and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
