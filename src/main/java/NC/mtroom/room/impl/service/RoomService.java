@@ -1,6 +1,7 @@
 package NC.mtroom.room.impl.service;
 
 import NC.mtroom.room.api.exeptions.HistoryNotFound;
+import NC.mtroom.room.api.exeptions.PastBooking;
 import NC.mtroom.room.api.exeptions.RoomAlreadyBooked;
 import NC.mtroom.room.api.exeptions.RoomNotFound;
 import NC.mtroom.room.api.model.*;
@@ -50,14 +51,17 @@ public class RoomService implements IRoomService {
         this.equipmentRepository = equipmentRepository;
     }
 
+    public Iterable<RoomDto> getAllRooms(){
 
-    @Override
-    public RoomDto getRoom(Long id) {
-        Room room = roomRepository.findByRoomID(id);
-        if ( room == null ) {
-            throw new RoomNotFound(id);
+        Iterable<Room> rooms = roomRepository.findAll();
+        LinkedList<RoomDto> roomDtoLinkedList = new LinkedList<>();
+        for (Room room : rooms){
+         roomDtoLinkedList.add(RoomtoRoomDto(room));
         }
+        return roomDtoLinkedList;
+    }
 
+    public RoomDto RoomtoRoomDto(Room room){
 
         RoomDto roomDto = new RoomDto();
 
@@ -74,21 +78,25 @@ public class RoomService implements IRoomService {
             EquipmentDto equipmentDto = new EquipmentDto(); //создаю новый экземпляр класса
             equipmentDto.setName(equipment.getName());  //Заполняю
             equipmentDto.setEqID(equipment.getEqID());
-                //Заполнение типов приборов из тех что есть в комнате
-                List<EquipmentType> equipmentTypeList = equipment.getEquipmentType(); //Получаю все типы что есть в текущей комнате
-                LinkedList<EquipmentTypeDto> equipmentTypeDtoLinkedList =  new LinkedList<>(); //создаю пустой список типов приборов ДТО
-                for (EquipmentType equipmentType : equipmentTypeList)
-                {
-                    EquipmentTypeDto equipmentTypeDto = new EquipmentTypeDto(); //по образу и подобию
-                    equipmentTypeDto.setName(equipmentType.getName());
-                    equipmentTypeDtoLinkedList.add(equipmentTypeDto);
-                }
-            equipmentDto.setEquipmentType(equipmentTypeDtoLinkedList); // добавляю список типов в список приборов
+
+            EquipmentTypeDto equipmentTypeDto = new EquipmentTypeDto(); //по образу и подобию
+            EquipmentType equipmentType = equipment.getEquipmentType();
+            equipmentTypeDto.setName(equipmentType.getName());
+            equipmentDto.setEquipmentType(equipmentTypeDto);
             equipmentDtoLinkedList.add(equipmentDto); //Добавляю его в список
         }
         roomDto.setEquipment(equipmentDtoLinkedList); //Список добавляю в поле эквипмент в Дто комнаты
-
         return roomDto;
+    }
+
+
+    @Override
+    public RoomDto getRoom(Long id) {
+        Room room = roomRepository.findByRoomID(id);
+        if ( room == null ) {
+            throw new RoomNotFound(id);
+        }
+        return RoomtoRoomDto(room);
     }
 
     @Override
@@ -118,7 +126,7 @@ public class RoomService implements IRoomService {
     }
 
    @Override
-    public ResponseEntity<?> setBooking(BookingDto bookingDto) {
+    public void setBooking(BookingDto bookingDto) {
 
 
             Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
@@ -134,20 +142,23 @@ public class RoomService implements IRoomService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
             LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
             LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
+            if (start.isBefore(LocalDateTime.now())){
+                throw new PastBooking(start);
+            }
 
+            List<History> historyList = room.getHistories();
+            for (History historycheck : historyList) {
+                if (!(end.isBefore(historycheck.getStart()) || end.isEqual(historycheck.getStart())
+                           || start.isAfter(historycheck.getEnd()) || start.isEqual(historycheck.getEnd()) )){
+                    throw new RoomAlreadyBooked(start,end);
+                }
+            }
 
        // с помощью gethistories выцепляем все истории что закреплены за комнатой
        // также важно чтобы выцеплялись только истории сегодняшнего дня
        // и проверяем не пересекаются ли даты
 
-            List<History> historyList = room.getHistories();
 
-            for (History historycheck : historyList) {
-                if (!(end.isBefore(historycheck.getStart()) || end.isEqual(historycheck.getStart())
-                        || start.isAfter(historycheck.getEnd()) || start.isEqual(historycheck.getEnd()) )){
-                    throw new RoomAlreadyBooked(start,end);
-                }
-            }
             History history = new History();
             history.setStart(start);
             history.setEnd(end);
@@ -161,37 +172,37 @@ public class RoomService implements IRoomService {
        //Сделать функцию которая бы возвращала List of UserEntity по List of logins
        //Сразу прохожусь по массиву и каждому юзеру добавляю в User_history запись о том что он забукан на встречу
 
+       LinkedList<UserHistory> userHistoryLinkedList = new LinkedList<>();
+            UserHistory userHistoryAdmin = new UserHistory();// Add admin
+            userHistoryAdmin.setUserID(userEntity);
+            userHistoryAdmin.setAdmin(true);
+            userHistoryAdmin.setHistoryID(history);
+            userHistoryLinkedList.add(userHistoryAdmin);
 
-            UserHistory userHistory = new UserHistory();
-//            Iterable<UserEntity> allUsers = userRepository.findAll();
-//
-//
-//            for(String user : bookingDto.getInvited_users()){
-//                for(UserEntity userEntity1 : allUsers){
-//
-//                }
-//                userHistory.setUserID(userEntity);
-//                userHistory.setAdmin(true);
-//                userHistory.setHistoryID(history);
-//            }
+        if (bookingDto.getInvited_users() != null) {
+                List<UserEntity> users = userRepository.findAllByLoginIn(bookingDto.getInvited_users());
+                for (UserEntity user : users) { //add from list
+                    UserHistory userHistory = new UserHistory();
 
+                    userHistory.setUserID(user);
+                    userHistory.setAdmin(false);
+                    userHistory.setHistoryID(history);
 
-                userHistory.setUserID(userEntity);
-                userHistory.setAdmin(true);
-                userHistory.setHistoryID(history);
-
-            userHistoryRepository.save(userHistory);
-            return ResponseEntity.ok().body("Room successfully booked!");
+                    userHistoryLinkedList.add(userHistory);
+                }
+        }
 
 
+
+            userHistoryRepository.saveAll(userHistoryLinkedList);
     }
+
     @Transactional
     @Override
-    public ResponseEntity<?> deleteBooking(Long bookingID){
-        if (historyRepository.findByHistoryID(bookingID) == null){
-            throw new HistoryNotFound(bookingID);
+    public void deleteBooking(Long historyID){
+        if (historyRepository.findByHistoryID(historyID) == null){
+            throw new HistoryNotFound(historyID);
         }
-        historyRepository.deleteByHistoryID(bookingID);
-        return ResponseEntity.ok().body("Successfully delete booking");
+        historyRepository.deleteByHistoryID(historyID);
     }
 }

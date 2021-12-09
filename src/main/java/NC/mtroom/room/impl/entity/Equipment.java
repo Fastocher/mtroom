@@ -19,8 +19,8 @@ public class Equipment {
 
     private String name;
 
-    @OneToMany(mappedBy = "equipment")
-    private List<EquipmentType> equipmentType;
+    @OneToOne(mappedBy = "equipment")
+    private EquipmentType equipmentType;
 
 
     @JsonBackReference
