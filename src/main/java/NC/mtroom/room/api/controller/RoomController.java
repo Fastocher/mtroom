@@ -36,6 +36,9 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getBooking(id,date));
     }
 
+//    @GetMapping("/pic")
+//    public
+
     @GetMapping("/all")
     public ResponseEntity<?> getBooking() {
         return ResponseEntity.ok(roomService.getAllRooms());
