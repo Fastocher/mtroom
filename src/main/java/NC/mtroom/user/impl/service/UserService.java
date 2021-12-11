@@ -1,6 +1,7 @@
 package NC.mtroom.user.impl.service;
 
 import NC.mtroom.JWTConfig.CustomUserDetails;
+import NC.mtroom.JWTConfig.JwtRequestFilter;
 import NC.mtroom.JWTConfig.JwtTokenUtil;
 import NC.mtroom.JWTConfig.Service.JwtUserDetailsService;
 import NC.mtroom.room.api.exeptions.InvalidCredentials;
@@ -18,6 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,19 +36,23 @@ public class UserService implements IUserService {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserHistoryRepository userHistoryRepository;
     private final JwtUserDetailsService jwtUserDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+
 
     public UserService(UserRepository userRepository,
                        PasswordEncoder bcryptEncoder,
                        AuthenticationManager authenticationManager,
                        JwtTokenUtil jwtTokenUtil,
                        UserHistoryRepository userHistoryRepository,
-                       JwtUserDetailsService jwtUserDetailsService) {
+                       JwtUserDetailsService jwtUserDetailsService,
+                       JwtRequestFilter jwtRequestFilter) {
         this.userRepository = userRepository;
         this.bcryptEncoder = bcryptEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userHistoryRepository = userHistoryRepository;
         this.jwtUserDetailsService = jwtUserDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Override
@@ -55,7 +61,9 @@ public class UserService implements IUserService {
     }
 
     public Iterable<UserEntity> getAllUsers(){
-        return userRepository.findAll();
+
+        return userRepository.findByLoginNot(jwtRequestFilter.getCurrentLogin());
+//        return userRepository.findAll();
     }
 
     @Override

@@ -1,9 +1,6 @@
 package NC.mtroom.room.impl.service;
 
-import NC.mtroom.room.api.exeptions.HistoryNotFound;
-import NC.mtroom.room.api.exeptions.PastBooking;
-import NC.mtroom.room.api.exeptions.RoomAlreadyBooked;
-import NC.mtroom.room.api.exeptions.RoomNotFound;
+import NC.mtroom.room.api.exeptions.*;
 import NC.mtroom.room.api.model.*;
 import NC.mtroom.room.api.service.IRoomService;
 import NC.mtroom.room.impl.entity.Equipment;
@@ -128,31 +125,35 @@ public class RoomService implements IRoomService {
    @Override
     public void setBooking(BookingDto bookingDto) {
 
+           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+           LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
+           LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
+           System.out.println(start+ " +6 = " + start.plusHours(6));
+           if (start.isAfter(end)){
+               throw new IncorrectBookingTime();
+           }
 
-            Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
-            if (room == null ) {
-                throw new RoomNotFound(bookingDto.getRoom_uuid());
-            }
+           if (start.isBefore(LocalDateTime.now())){
+               throw new PastBooking(start);
+           }
 
-            UserEntity userEntity = userRepository.findByLogin(bookingDto.getAdmin());
-            if (userEntity == null){
+           Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
+           if (room == null ) {
+               throw new RoomNotFound(bookingDto.getRoom_uuid());
+           }
+
+           UserEntity userEntity = userRepository.findByLogin(bookingDto.getAdmin());
+           if (userEntity == null){
                throw new UserNotFound(bookingDto.getAdmin());
-            }
+           }
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-            LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
-            LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
-            if (start.isBefore(LocalDateTime.now())){
-                throw new PastBooking(start);
-            }
-
-            List<History> historyList = room.getHistories();
-            for (History historycheck : historyList) {
-                if (!(end.isBefore(historycheck.getStart()) || end.isEqual(historycheck.getStart())
+           List<History> historyList = room.getHistories();
+           for (History historycheck : historyList) {
+               if (!(end.isBefore(historycheck.getStart()) || end.isEqual(historycheck.getStart())
                            || start.isAfter(historycheck.getEnd()) || start.isEqual(historycheck.getEnd()) )){
-                    throw new RoomAlreadyBooked(start,end);
-                }
-            }
+                   throw new RoomAlreadyBooked(start,end);
+               }
+           }
 
        // с помощью gethistories выцепляем все истории что закреплены за комнатой
        // также важно чтобы выцеплялись только истории сегодняшнего дня

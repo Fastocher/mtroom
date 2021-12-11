@@ -11,5 +11,6 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     UserEntity findByUsername(String Username);
     UserEntity findByLogin(String Login);
     List<UserEntity> findAllByLoginIn(List<String> users);
+    List<UserEntity> findByLoginNot(String login);
 }
 

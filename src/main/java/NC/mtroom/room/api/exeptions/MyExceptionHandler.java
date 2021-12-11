@@ -46,6 +46,11 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IncorrectBookingTime.class)
+    protected ResponseEntity<MyException> handleIncorrectBookingTime(IncorrectBookingTime e){
+        return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(RoomAlreadyBooked.class)
     protected ResponseEntity<MyException> handleRoomAlreadyBooked(RoomAlreadyBooked e){
         return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.CONFLICT,HttpStatus.CONFLICT.value()), HttpStatus.CONFLICT);
