@@ -3,6 +3,8 @@ package NC.mtroom.room.api.controller;
 import NC.mtroom.room.api.model.BookingDto;
 import NC.mtroom.room.api.model.RoomDto;
 import NC.mtroom.room.api.service.IRoomService;
+import io.github.classgraph.Resource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 
 
@@ -36,8 +40,12 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getBooking(id,date));
     }
 
-//    @GetMapping("/pic")
-//    public
+    @GetMapping("/picture")
+    public File picture() throws IOException {
+        ClassPathResource roompic = new ClassPathResource("static/img/room1.png");
+        return roompic.getFile();
+
+    }
 
     @GetMapping("/all")
     public ResponseEntity<?> getBooking() {

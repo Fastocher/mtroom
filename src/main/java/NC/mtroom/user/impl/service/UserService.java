@@ -23,9 +23,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 @Service
@@ -61,9 +63,7 @@ public class UserService implements IUserService {
     }
 
     public Iterable<UserEntity> getAllUsers(){
-
         return userRepository.findByLoginNot(jwtRequestFilter.getCurrentLogin());
-//        return userRepository.findAll();
     }
 
     @Override

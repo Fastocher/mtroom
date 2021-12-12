@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -128,13 +129,21 @@ public class RoomService implements IRoomService {
            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
            LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
            LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
-           System.out.println(start+ " +6 = " + start.plusHours(6));
+
+
            if (start.isAfter(end)){
                throw new IncorrectBookingTime();
            }
 
-           if (start.isBefore(LocalDateTime.now())){
+           if (start.isBefore(LocalDateTime.now().minusMinutes(5))){
                throw new PastBooking(start);
+           }
+
+           Duration duration = Duration.between(start,end);
+           if (duration.toHours() > 6){
+               throw new BookingDuration(duration.toHours(), end.getMinute()- start.getMinute());
+           } else if(duration.toMinutes() < 15){
+               throw new BookingDuration(end.getMinute()- start.getMinute());
            }
 
            Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());

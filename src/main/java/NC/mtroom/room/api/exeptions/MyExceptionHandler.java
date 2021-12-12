@@ -36,6 +36,11 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BookingDuration.class)
+    protected ResponseEntity<MyException> handleBookingDuration(BookingDuration e){
+        return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(UserNotFound.class)
     protected ResponseEntity<MyException> handleUserNotFound(UserNotFound e){
         return new ResponseEntity<>(new MyException(e.getMessage(),HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value()),HttpStatus.NOT_FOUND);

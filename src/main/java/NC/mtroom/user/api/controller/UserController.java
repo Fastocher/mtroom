@@ -8,8 +8,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
+import java.awt.*;
+import java.util.ResourceBundle;
+
 @Validated
 @RestController
 @CrossOrigin
@@ -38,6 +42,7 @@ public class UserController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers () throws UsernameNotFoundException {
+        System.out.println(System.getProperty("user.home")+" -//- ");
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
