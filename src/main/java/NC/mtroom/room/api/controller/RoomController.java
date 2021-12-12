@@ -14,6 +14,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 
 
@@ -41,9 +43,9 @@ public class RoomController {
     }
 
     @GetMapping("/picture")
-    public File picture() throws IOException {
+    public InputStream picture() throws IOException {
         ClassPathResource roompic = new ClassPathResource("static/img/room1.png");
-        return roompic.getFile();
+        return roompic.getInputStream();
 
     }
 
