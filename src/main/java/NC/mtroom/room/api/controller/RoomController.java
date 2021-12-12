@@ -43,8 +43,9 @@ public class RoomController {
     }
 
     @GetMapping("/picture")
-    public InputStream picture() throws IOException {
-        return new ClassPathResource("static/img/room1.png").getInputStream();
+    public String picture() throws IOException {
+        ClassPathResource roompic = new ClassPathResource("static/img/room1.png");
+        return roompic.getURL().toString();
 
     }
 
