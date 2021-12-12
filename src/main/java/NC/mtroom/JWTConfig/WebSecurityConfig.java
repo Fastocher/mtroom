@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
                 //для регистрации и входа отключим защиту
-                .authorizeRequests().antMatchers("/user/register", "/user/login", "/room/{id}","/room/booking/{id}","/room/all","/room/picture").permitAll().
+                .authorizeRequests().antMatchers("/user/register", "/user/login", "/room/{id}","/room/booking/{id}","/room/all","/pic/**").permitAll().
                 //для всего остального включим
                 anyRequest().authenticated().and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

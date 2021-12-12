@@ -67,6 +67,7 @@ public class RoomService implements IRoomService {
         roomDto.setName(room.getName());
         roomDto.setNumber_of_seats(room.getNum_of_seats());
         roomDto.setLocation(room.getLocation());
+        roomDto.setPhotoURLs(room.getPhotos());
 
         //Заполнение поля приборов в комнате
 

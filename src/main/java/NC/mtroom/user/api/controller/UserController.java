@@ -42,7 +42,6 @@ public class UserController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers () throws UsernameNotFoundException {
-        System.out.println(System.getProperty("user.home")+" -//- ");
         return ResponseEntity.ok(userService.getAllUsers());
     }
 

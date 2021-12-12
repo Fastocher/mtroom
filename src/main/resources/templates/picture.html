@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-    <img src="C:/Users/Admin/IdeaProjects/mtroom/src/main/resources/static/img/room1.png"/>
-    <img src="/img/room1.png"/>
+    <a th:href="@{'pic/' +${pic.getName()}}"><span th:text="${pic.getName()}"/></a>
+    <img th:src="${pic.getPath}"/>
+    <img th:src="@{room1.png}"/>
 </body>
 </html>

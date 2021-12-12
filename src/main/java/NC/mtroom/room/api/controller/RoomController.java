@@ -7,6 +7,7 @@ import io.github.classgraph.Resource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,12 +43,6 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getBooking(id,date));
     }
 
-    @GetMapping("/picture")
-    public String picture() throws IOException {
-        ClassPathResource roompic = new ClassPathResource("static/img/room1.png");
-        return roompic.getURL().toString();
-
-    }
 
     @GetMapping("/all")
     public ResponseEntity<?> getBooking() {
