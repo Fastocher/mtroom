@@ -184,28 +184,25 @@ public class RoomService implements IRoomService {
        //Сразу прохожусь по массиву и каждому юзеру добавляю в User_history запись о том что он забукан на встречу
 
        LinkedList<UserHistory> userHistoryLinkedList = new LinkedList<>();
-            UserHistory userHistoryAdmin = new UserHistory();// Add admin
-            userHistoryAdmin.setUserID(userEntity);
-            userHistoryAdmin.setAdmin(true);
-            userHistoryAdmin.setHistoryID(history);
-            userHistoryLinkedList.add(userHistoryAdmin);
-
+            userHistoryLinkedList.add(setUserHistory(userEntity,history,true));
         if (bookingDto.getInvited_users() != null) {
                 List<UserEntity> users = userRepository.findAllByLoginIn(bookingDto.getInvited_users());
                 for (UserEntity user : users) { //add from list
-                    UserHistory userHistory = new UserHistory();
-
-                    userHistory.setUserID(user);
-                    userHistory.setAdmin(false);
-                    userHistory.setHistoryID(history);
-
-                    userHistoryLinkedList.add(userHistory);
+                    userHistoryLinkedList.add(setUserHistory(user,history,false));
                 }
         }
 
 
 
             userHistoryRepository.saveAll(userHistoryLinkedList);
+    }
+    public UserHistory setUserHistory(UserEntity userEntity, History history, boolean isAdmin)
+    {
+        UserHistory userHistory = new UserHistory();
+        userHistory.setUserID(userEntity);
+        userHistory.setAdmin(isAdmin);
+        userHistory.setHistoryID(history);
+        return userHistory;
     }
 
     @Transactional
