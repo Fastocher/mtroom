@@ -10,6 +10,10 @@ public class UserHistoryDto {
 
     private Long room_uuid;
 
+    private String name;
+
+    private String photoURLs;
+
     private TimeSegmentDto time;
 
     private boolean isAdmin;

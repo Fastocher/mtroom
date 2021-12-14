@@ -6,6 +6,8 @@ import NC.mtroom.JWTConfig.JwtTokenUtil;
 import NC.mtroom.JWTConfig.Service.JwtUserDetailsService;
 import NC.mtroom.room.api.exeptions.InvalidCredentials;
 import NC.mtroom.room.api.model.TimeSegmentDto;
+import NC.mtroom.room.impl.entity.Room;
+import NC.mtroom.room.impl.repository.RoomRepository;
 import NC.mtroom.user.api.exeptions.UserAlreadyExist;
 import NC.mtroom.user.api.exeptions.UserNotFound;
 import NC.mtroom.user.api.model.*;
@@ -39,6 +41,8 @@ public class UserService implements IUserService {
     private final UserHistoryRepository userHistoryRepository;
     private final JwtUserDetailsService jwtUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final RoomRepository roomRepository;
+
 
 
     public UserService(UserRepository userRepository,
@@ -47,7 +51,8 @@ public class UserService implements IUserService {
                        JwtTokenUtil jwtTokenUtil,
                        UserHistoryRepository userHistoryRepository,
                        JwtUserDetailsService jwtUserDetailsService,
-                       JwtRequestFilter jwtRequestFilter) {
+                       JwtRequestFilter jwtRequestFilter,
+                       RoomRepository roomRepository) {
         this.userRepository = userRepository;
         this.bcryptEncoder = bcryptEncoder;
         this.authenticationManager = authenticationManager;
@@ -55,6 +60,7 @@ public class UserService implements IUserService {
         this.userHistoryRepository = userHistoryRepository;
         this.jwtUserDetailsService = jwtUserDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
+        this.roomRepository = roomRepository;
     }
 
     @Override
@@ -123,6 +129,7 @@ public class UserService implements IUserService {
             throw new UserNotFound(login);
         }
 
+
         LinkedList<UserHistoryDto> answer =  new LinkedList<>();
         ArrayList<UserHistory> userHistoryList = (ArrayList<UserHistory>) userHistoryRepository.findAllByUserID(userEntity);
 
@@ -136,7 +143,9 @@ public class UserService implements IUserService {
                     history.getHistoryID(),
                     history.getTitle()
             );
-
+            Room room = roomRepository.findByRoomID(history.getRoomID().getRoomID());
+            currentDTO.setName(room.getName());
+            currentDTO.setPhotoURLs(room.getPhotos());
             currentDTO.setRoom_uuid(history.getRoomID().getRoomID());
             currentDTO.setAdmin(userHistory.isAdmin());
             currentDTO.setTime(time);
