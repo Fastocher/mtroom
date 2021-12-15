@@ -1,5 +1,6 @@
 package NC.mtroom.room.impl.service;
 
+import NC.mtroom.JWTConfig.JwtRequestFilter;
 import NC.mtroom.room.api.exeptions.*;
 import NC.mtroom.room.api.model.*;
 import NC.mtroom.room.api.service.IRoomService;
@@ -35,18 +36,18 @@ public class RoomService implements IRoomService {
     private final UserHistoryRepository userHistoryRepository;
     private final HistoryRepository historyRepository;
     private final UserRepository userRepository;
-    private final EquipmentRepository equipmentRepository;
+    private final JwtRequestFilter jwtRequestFilter;
 
     public RoomService(RoomRepository roomRepository,
                        UserHistoryRepository userHistoryRepository,
                        HistoryRepository historyRepository,
                        UserRepository userRepository,
-                       EquipmentRepository equipmentRepository) {
+                       JwtRequestFilter jwtRequestFilter) {
         this.roomRepository = roomRepository;
         this.userHistoryRepository = userHistoryRepository;
         this.historyRepository = historyRepository;
         this.userRepository = userRepository;
-        this.equipmentRepository = equipmentRepository;
+        this.jwtRequestFilter = jwtRequestFilter;
     }
 
     public Iterable<RoomDto> getAllRooms(){
@@ -183,17 +184,14 @@ public class RoomService implements IRoomService {
        //Сделать функцию которая бы возвращала List of UserEntity по List of logins
        //Сразу прохожусь по массиву и каждому юзеру добавляю в User_history запись о том что он забукан на встречу
 
-       LinkedList<UserHistory> userHistoryLinkedList = new LinkedList<>();
+            LinkedList<UserHistory> userHistoryLinkedList = new LinkedList<>();
             userHistoryLinkedList.add(setUserHistory(userEntity,history,true));
-        if (bookingDto.getInvited_users() != null) {
+            if (bookingDto.getInvited_users() != null) {
                 List<UserEntity> users = userRepository.findAllByLoginIn(bookingDto.getInvited_users());
                 for (UserEntity user : users) { //add from list
                     userHistoryLinkedList.add(setUserHistory(user,history,false));
                 }
-        }
-
-
-
+            }
             userHistoryRepository.saveAll(userHistoryLinkedList);
     }
     public UserHistory setUserHistory(UserEntity userEntity, History history, boolean isAdmin)
@@ -208,9 +206,21 @@ public class RoomService implements IRoomService {
     @Transactional
     @Override
     public void deleteBooking(Long historyID){
-        if (historyRepository.findByHistoryID(historyID) == null){
+        History history = historyRepository.findByHistoryID(historyID);
+        if ( history == null){
             throw new HistoryNotFound(historyID);
         }
-        historyRepository.deleteByHistoryID(historyID);
+
+        UserEntity userEntity = userRepository.findByLogin(jwtRequestFilter.getCurrentLogin());
+        UserHistory userHistory = userHistoryRepository.findDistinctByHistoryIDAndUserID(history, userEntity);
+        if (userHistory == null){
+            throw new HistoryNotFound(historyID);
+        }
+        if (userHistory.isAdmin()){
+            historyRepository.deleteByHistoryID(historyID);
+        }else{
+            userHistoryRepository.delete(userHistory);
+        }
+
     }
 }

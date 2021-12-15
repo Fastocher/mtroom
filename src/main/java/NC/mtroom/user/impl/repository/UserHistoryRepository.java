@@ -1,5 +1,6 @@
 package NC.mtroom.user.impl.repository;
 
+import NC.mtroom.user.impl.entity.History;
 import NC.mtroom.user.impl.entity.UserEntity;
 import NC.mtroom.user.impl.entity.UserHistory;
 
@@ -11,5 +12,6 @@ import java.util.List;
 @Repository
 public interface UserHistoryRepository extends CrudRepository<UserHistory, Long> {
     UserHistory findByUserID(UserEntity userEntity);
+    UserHistory findDistinctByHistoryIDAndUserID(History history, UserEntity userEntity);
     List<UserHistory> findAllByUserID(UserEntity userEntity);
 }
