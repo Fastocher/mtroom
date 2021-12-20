@@ -35,8 +35,8 @@ public class UserController {
             return ResponseEntity.ok(userService.registerUser(userDto));
     }
 
-    @GetMapping
-    public ResponseEntity<?> getUser (String login) throws UsernameNotFoundException {
+    @GetMapping("/{login}")
+    public ResponseEntity<?> getUser (@PathVariable String login) throws UsernameNotFoundException {
             return ResponseEntity.ok(userService.getUser(login));
     }
 

@@ -22,8 +22,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,15 +66,24 @@ public class UserService implements IUserService {
         this.roomRepository = roomRepository;
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public UserEntity getUser(String username) {
-        return userRepository.findByUsername(username);
+    public UserEntity getUser(String login) throws UserNotFound {
+        UserEntity userEntity = userRepository.findByLogin(login);
+        if ( userEntity != null) {
+            return userEntity;
+        }else {
+            throw new UserNotFound(login);
+        }
+
+
     }
 
     public Iterable<UserEntity> getAllUsers(){
         return userRepository.findByLoginNot(jwtRequestFilter.getCurrentLogin());
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public RegisterDto registerUser(UserDto userDto) throws UserAlreadyExist {
         UserEntity newUser = new UserEntity();
@@ -120,7 +132,7 @@ public class UserService implements IUserService {
         }
     }
 
-
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public List<UserHistoryDto> getUserHistory(String login) {
 

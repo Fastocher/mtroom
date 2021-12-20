@@ -26,6 +26,13 @@ import java.util.Locale;
 @ControllerAdvice
 public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
+    //DEFAULT
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<MyException> handleDefaultException(Exception e){
+        return new ResponseEntity<>(new MyException("Something went wrong!",HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
+    }
+
+
     @ExceptionHandler(RoomNotFound.class)
     protected ResponseEntity<MyException> handleRoomNotFound(RoomNotFound e){
         return new ResponseEntity<>(new MyException(e.getMessage(), HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value()),HttpStatus.NOT_FOUND);

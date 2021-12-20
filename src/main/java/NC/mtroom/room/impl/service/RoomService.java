@@ -18,6 +18,7 @@ import NC.mtroom.user.impl.repository.UserHistoryRepository;
 import NC.mtroom.user.impl.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
@@ -99,6 +100,7 @@ public class RoomService implements IRoomService {
         return RoomtoRoomDto(room);
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public List<TimeSegmentDto> getBooking(Long id, LocalDate date) {
         Room room = roomRepository.findByRoomID(id);
@@ -125,12 +127,14 @@ public class RoomService implements IRoomService {
         return timeSegmentDtoLinkedList;
     }
 
-   @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Override
     public void setBooking(BookingDto bookingDto) {
 
            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
            LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
            LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
+
 
 
            if (start.isAfter(end)){
@@ -203,7 +207,7 @@ public class RoomService implements IRoomService {
         return userHistory;
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public void deleteBooking(Long historyID){
         History history = historyRepository.findByHistoryID(historyID);
