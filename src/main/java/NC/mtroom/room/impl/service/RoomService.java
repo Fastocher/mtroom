@@ -140,9 +140,7 @@ public class RoomService implements IRoomService {
            LocalDateTime nonWorkingStart = start.with(LocalTime.of(8,0));
            LocalDateTime nonWorkingEnd = end.with(LocalTime.of(22,0));
 
-        if(end.isAfter(nonWorkingEnd) || start.isBefore(nonWorkingStart) ){
-            throw new NonWorkingHours();
-        }
+
 
            if (start.isAfter(end)){
                throw new IncorrectBookingTime();
@@ -157,6 +155,10 @@ public class RoomService implements IRoomService {
                throw new BookingDuration(duration.toHours(), end.getMinute()- start.getMinute());
            } else if(duration.toMinutes() < 15){
                throw new BookingDuration(end.getMinute()- start.getMinute());
+           }
+
+           if(end.isAfter(nonWorkingEnd) || start.isBefore(nonWorkingStart) ){
+               throw new NonWorkingHours();
            }
 
 
