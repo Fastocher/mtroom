@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
@@ -136,6 +137,12 @@ public class RoomService implements IRoomService {
            LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
            LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
 
+           LocalDateTime nonWorkingStart = start.with(LocalTime.of(8,0));
+           LocalDateTime nonWorkingEnd = end.with(LocalTime.of(22,0));
+
+        if(end.isAfter(nonWorkingEnd) || start.isBefore(nonWorkingStart) ){
+            throw new NonWorkingHours();
+        }
 
            if (start.isAfter(end)){
                throw new IncorrectBookingTime();
@@ -151,6 +158,8 @@ public class RoomService implements IRoomService {
            } else if(duration.toMinutes() < 15){
                throw new BookingDuration(end.getMinute()- start.getMinute());
            }
+
+
 
            Room room = roomRepository.findByRoomID(bookingDto.getRoom_uuid());
            if (room == null ) {

@@ -32,6 +32,10 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new MyException("Something went wrong!",HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NonWorkingHours.class)
+    protected ResponseEntity<MyException> handleNonWorkingHours(NonWorkingHours e){
+        return new ResponseEntity<>(new MyException(e.getMessage(), HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()),HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(RoomNotFound.class)
     protected ResponseEntity<MyException> handleRoomNotFound(RoomNotFound e){
