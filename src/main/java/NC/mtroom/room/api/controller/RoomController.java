@@ -5,6 +5,7 @@ import NC.mtroom.room.api.model.RoomDto;
 import NC.mtroom.room.api.service.IRoomService;
 import io.github.classgraph.Resource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;

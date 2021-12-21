@@ -16,6 +16,7 @@ import NC.mtroom.user.impl.entity.UserHistory;
 import NC.mtroom.user.impl.repository.HistoryRepository;
 import NC.mtroom.user.impl.repository.UserHistoryRepository;
 import NC.mtroom.user.impl.repository.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -110,7 +111,7 @@ public class RoomService implements IRoomService {
         if (date == null){
             date = LocalDate.now();
         }
-        List<History> historyList = room.getHistories();
+        List<History> historyList = room.getHistories(Sort.by(Sort.Direction.ASC, "start"));
         LinkedList<TimeSegmentDto> timeSegmentDtoLinkedList = new LinkedList<>();
         for (History history : historyList)
         {
@@ -134,7 +135,6 @@ public class RoomService implements IRoomService {
            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
            LocalDateTime start = LocalDateTime.parse(bookingDto.getTime().getStart(), formatter);
            LocalDateTime end = LocalDateTime.parse(bookingDto.getTime().getEnd(), formatter);
-
 
 
            if (start.isAfter(end)){

@@ -4,6 +4,8 @@ package NC.mtroom.room.impl.entity;
 import NC.mtroom.room.api.model.EquipmentDto;
 import NC.mtroom.user.impl.entity.History;
 import lombok.*;
+import net.bytebuddy.TypeCache;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -26,8 +28,16 @@ public class Room {
     @OneToMany(mappedBy = "roomID")
     private List<Equipment> equipment;
 
+
+
+    public List<History> getHistories(Sort sort) {
+        return histories;
+    }
+
     @OneToMany(mappedBy = "roomID")
     private List<History> histories;
+
+
 
     private String name;
 
@@ -36,6 +46,7 @@ public class Room {
     private String photos;
 
     private String location;
+
 
 
 }
