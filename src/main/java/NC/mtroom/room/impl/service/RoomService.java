@@ -111,7 +111,7 @@ public class RoomService implements IRoomService {
         if (date == null){
             date = LocalDate.now();
         }
-        List<History> historyList = room.getHistories(Sort.by(Sort.Direction.ASC, "start"));
+        List<History> historyList = room.getHistories();
         LinkedList<TimeSegmentDto> timeSegmentDtoLinkedList = new LinkedList<>();
         for (History history : historyList)
         {

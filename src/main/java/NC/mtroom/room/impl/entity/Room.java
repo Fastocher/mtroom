@@ -28,13 +28,8 @@ public class Room {
     @OneToMany(mappedBy = "roomID")
     private List<Equipment> equipment;
 
-
-
-    public List<History> getHistories(Sort sort) {
-        return histories;
-    }
-
     @OneToMany(mappedBy = "roomID")
+    @OrderBy("start asc")
     private List<History> histories;
 
 
